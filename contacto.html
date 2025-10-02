@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - OBZENO</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header>
+    <h1>Contacto OBZENO</h1>
+</header>
+
+<main>
+    <section class="contacto">
+        <h2>Envíanos tus comentarios o quejas</h2>
+<!/* -------------------------------------------------------------
+         FORMULARIO DE CONTACTO
+--------------------------------------------------------------- */>
+        <form id="form-contacto">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="mensaje">Mensaje:</label>
+            <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+
+            <label for="tipo-queja">Tipo de queja/reclamo:</label>
+            <select id="tipo-queja" name="tipo-queja" required>
+                <option value="">-- Selecciona una opción --</option>
+                <option value="reclamo-pago">Reclamo de pago</option>
+                <option value="producto-danado">Producto dañado</option>
+                <option value="consulta-general">Consulta general</option>
+            </select>
+
+            <button type="submit">Enviar</button>
+        </form>
+
+        <section class="info-contacto">
+            <h3>Otras formas de contactarnos</h3>
+            <p>Correo: obzenooficial@gamai.com</p>
+            <p>Teléfono: +52 333 333 3333</p>
+        </section>
+    </section>
+</main>
+
+<!/* -------------------------------------------------------------
+PIE DE PAGINA
+--------------------------------------------------------------- */>
+
+<footer>
+    <p>&copy; 2025 OBZENO. Todos los derechos reservados R34.</p>
+</footer>
+</body>
+</html>

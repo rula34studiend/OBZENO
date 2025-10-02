@@ -573,8 +573,30 @@ footer p {
     }
 }
 
-
 /* -------------------------------------------------------------
-                        MUJER
-------------------------------------------------------------- */
+    CONTACTO
+---------------------------------------------------------------- */
+
+footer {
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+}
+
+footer .btn-contacto {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #ff6600;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+footer .btn-contacto:hover {
+    background-color: #e65c00;
+}
 
