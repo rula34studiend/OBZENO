@@ -34,23 +34,15 @@
         <li><a href="#">ROPA DE ANIME</a></li>
         <li><a href="#">FIGURAS</a></li>
         <li><a href="#">INICIAR SESION</a></li>
-        <li><button id="abrir-carrito" class="btn-carrito"> CARRITO (0)</button><li> <!-- Boton de carrito -->
+
+        <!-- Carrito de compras -->
+        <li>
+            <button id="btn-carrito" class="btn-carrito" onclick="window.location.href='carrito.html'">
+                🛒 CARRITO (<span id="contador-carrito">0</span>)
+            </button>
+        </li>
     </ul>
 </nav>
-
-
-<!/* -------------------------------------------------------------
-    CARRITO DE COMPRAS
----------------------------------------------------------------- */>
-
-<div class="carrito-contenido" id="carrito-contenido">
-    <button id="cerrar-carrito">X</button>
-    <h3>CARRITO</h3>
-    <ul id="lista-carrito"></ul>
-    <div id="carrito-productos"></div>
-    <p id="subtotal">SUBTOTAL: $0.00</p>
-    <button id="ver-carrito" class="btn-ver-carrito"> VER EL CARRITO </button>
-    </div>
 </header>
 
 <!/* ------------------------------------------------------------
