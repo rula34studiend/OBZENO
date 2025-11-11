@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OBZENO</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/carrito.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 </head>
 <body>
@@ -12,7 +14,6 @@
 <!/* -----------------------------------------------------------
     BARRA DE NAVEGACION
 ---------------------------------------------------------------*/>
-
 <header>
     <div class="logo">
         <h1>OBZENO</h1>
@@ -24,7 +25,7 @@
             <a href="#">TIENDA DE ROPA</a>
             <ul class="submenu">
                 <li><a href="hombre.html">HOMBRES</a></li>
-                <li><a href="#">MUJERES</a></li>
+                <li><a href="#">MUJERES</a></li>z|
                 <li><a href="#">NIÑO</a></li>
                 <li><a href="#">SUDADERAS</a></li>
                 <li><a href="#">TENIS</a></li>
@@ -36,15 +37,13 @@
         <li><a href="#">INICIAR SESION</a></li>
 
         <!-- Carrito de compras -->
-        <li>
-            <button id="btn-carrito" class="btn-carrito" onclick="window.location.href='carrito.html'">
-                🛒 CARRITO (<span id="contador-carrito">0</span>)
-            </button>
-        </li>
+        <a href="carrito.html" class="cartTab" id="cartLink" aria-label="Ver carrito">
+            <i class="ri-shopping-cart-line"></i>
+            <div class="cart-item-count" id="cartCount">0</div>
+        </a>
     </ul>
 </nav>
 </header>
-
 <!/* ------------------------------------------------------------
     BOTON QUE DIRECCIONA EL APARTADO DE OFERTAS
 -------------------------------------------------------------- */>
@@ -80,21 +79,21 @@
 --------------------------------------------------------------- */>
 
 <section class="procutos-destacados">
-    <div class="Productos-destacados">
-        <h4>OBZENO</h4>
-        <h5>PRODUCTOS DESTACADOS</h5>
-    </div>
-    <div class="productos">
+     <div class="Productos-destacados">
+            <h4>OBZENO</h4>
+            <h5>PRODUCTOS DESTACADOS</h5>
+        </div>
+        <div class="productos">
 
-        <!/ /////////////////////////////////////////////////
-        REPETIR ESTE BLOQUE DE CODIGO POR PRODUCTOS
-        ////////////////////////////////////////////////// */>
+    <!/ /////////////////////////////////////////////////
+            REPETIR ESTE BLOQUE DE CODIGO POR PRODUCTOS
+    ////////////////////////////////////////////////// */>
 
         <div class="producto">
             <img src="img/DESTACADOS/Destacado1.jpg" alt="Camiseta geek 1">
             <h3>BEAST BREATHING</h3>
             <p class="precio"> $270.00 </p>
-            <button class="agregar-carrito" data-nombre="BEAST BREATHING" data-precio="270.00">AGREGAR AL CARRITO</button>
+            <button class="agregar-carrito" data-nombre="BEAST BREATHING" data-precio="270.00" data-img="img/DESTACADOS/Destacado1.jpg">AGREGAR AL CARRITO</button>
         </div>
 
         <!/ /////////////////////////////////////
@@ -104,19 +103,21 @@
             <img src="img/DESTACADOS/Destacado2.jpg" alt="Camiseta geek 1">
             <h3>RETRO GAMES</h3>
             <p class="precio"> $270.00 </p>
-            <button class="agregar-carrito" data-nombre="RETRO GAMES" data-precio="270.00">AGREGAR AL CARRITO</button>
+            <button class="agregar-carrito" data-nombre="RETRO GAMES" data-precio="270.00"data-img="img/DESTACADOS/Destacado2.jpg">AGREGAR AL CARRITO</button>
         </div>
 
         <div class="producto">
             <img src="img/DESTACADOS/Destacado3.jpg" alt="Camiseta geek 1">
             <h3>VENDETTA</h3>
             <p class="precio"> $270.00 </p>
-            <button class="agregar-carrito" data-nombre="VENDETTA" data-precio="270.00">AGREGAR AL CARRITO</button>
+            <button class="agregar-carrito" data-nombre="VENDETTA" data-precio="270.00" data-img="img/DESTACADOS/Destacado3">AGREGAR AL CARRITO</button>
         </div>
 
+        <div id="carrito-contenedor"></div>
+        <script src="carrito.js"></script>
 
     </div>
-</section>
+    </section>
 
 <!/* -------------------------------------------------------------
     PRODUCTOS DE OFERTAS ESPECIALES
@@ -209,6 +210,8 @@
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="js/CARRUSEL.js"></script>
+<script src="js/contador-carrito.js"></script>
+
 
 
 </body>

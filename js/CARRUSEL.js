@@ -2,7 +2,7 @@
    Iniciador carrusel & botones
 ------------------------------------------------------------- */
 
-// script.js
+// Carrusel.js
 document.addEventListener('DOMContentLoaded', () => {
     if (typeof Swiper === 'undefined') {
         console.error('Swiper no está cargado. Revisa el orden de los <script>.');

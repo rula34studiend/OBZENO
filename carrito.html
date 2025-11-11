@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de compras</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <h1>OBZENO</h1>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="index.html">INICIO</a></li>
+            <li><a href="#">TIENDA</a></li>
+            <li><a href="#">INICIAR SESIÓN</a></li>
+            <div class="cartTab">
+                <i class="ri-shopping-cart-line"></i>
+                <div class="cart-item-count"></div>
+            </div>
+        </ul>
+    </nav>
+</header>
+
+<section class="carrito">
+    <h2>🛍 Tu carrito</h2>
+    <div id="carrito-lista"></div>
+    <h3 id="carrito-total"></h3>
+
+    <div class="carrito-botones">
+        <a href="index.html" class="seguir">← Seguir comprando</a>
+        <a href="#" class="pagar">Ir a pagar 💳</a>
+    </div>
+
+</section>
+
+<script src="carrito.js"></script>
+<script>
+    // Mostrar productos del carrito
+    document.addEventListener("DOMContentLoaded", () => {
+        const lista = document.getElementById("carrito-lista");
+        const total = document.getElementById("carrito-total");
+
+        let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+        if (carrito.length === 0) {
+            lista.innerHTML = "<p>Tu carrito está vacío 😢</p>";
+            total.textContent = "";
+            return;
+        }
+
+        let totalCompra = 0;
+        lista.innerHTML = "";
+
+        carrito.forEach((item, index) => {
+            const itemHTML = `
+            <div class="carrito-item">
+                <p><strong>${item.nombre}</strong> — $${item.precio} x ${item.cantidad}</p>
+                <button onclick="eliminarItem(${index})">Eliminar</button>
+            </div>
+        `;
+            lista.innerHTML += itemHTML;
+            totalCompra += item.precio * item.cantidad;
+        });
+
+        total.textContent = `Total: $${totalCompra.toFixed(2)}`;
+    });
+
+    function eliminarItem(index) {
+        let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+        carrito.splice(index, 1);
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        location.reload();
+    }
+</script>
+
+</body>
+</html>
