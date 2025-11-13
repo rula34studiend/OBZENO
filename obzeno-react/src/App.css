@@ -6,6 +6,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f0f0f0;
+    width: 100%;
 }
 
 h1, h2, h3 {
@@ -41,7 +42,7 @@ nav ul {
 
 nav ul li {
     margin-left: 20px;
-    position: relative; /* Necesario para el submenú */
+    position: relative;
 }
 
 nav ul li a {
@@ -59,31 +60,31 @@ nav ul li a:hover {
 
 /* Estilos para el submenú */
 .submenu {
-    display: none; /* Ocultar el submenú por defecto */
-    position: absolute; /* Posicionamiento absoluto */
-    top: 100%; /* Colocar debajo del menú principal */
-    left: 0; /* Alinear a la izquierda */
-    background-color: gray; /* Color de fondo */
-    padding: 10px 0; /* Espaciado */
-    z-index: 1000; /* Asegúrate de que esté por encima */
+    display: none; 
+    position: absolute; 
+    top: 100%; 
+    left: 0; 
+    background-color: gray; 
+    padding: 10px 0;
+    z-index: 1000; 
 }
 
 nav ul li:hover .submenu {
-    display: block; /* Mostrar el submenú al pasar el cursor */
+    display: block; 
 }
 
 .submenu li {
-    margin: 0; /* Sin margen en los elementos del submenú */
+    margin: 0; 
 }
 
 .submenu li a {
-    display: block; /* Asegura que cada elemento del submenú ocupe todo el ancho */
-    padding: 10px 20px; /* Espaciado interno */
-    color: white; /* Color del texto */
+    display: block; 
+    padding: 10px 20px; 
+    color: white; 
 }
 
 .submenu li a:hover {
-    background-color: #444; /* Color de fondo al pasar el cursor */
+    background-color: #444; 
 }
 
 /* -------------------------------------------------------------
@@ -92,7 +93,7 @@ nav ul li:hover .submenu {
 .carrito-contenido {
     position: fixed;
     top: 0;
-    right: -400px; /* oculto */
+    right: -400px;
     width: 350px;
     height: 100%;
     transition: right .3s;
@@ -100,7 +101,7 @@ nav ul li:hover .submenu {
 }
 
 .carrito-contenido.active {
-    right: 0; /* Cuando está activo, se desplaza hacia dentro */
+    right: 0; 
 }
 
 .carrito-contenido h3 {
@@ -197,7 +198,7 @@ nav ul li:hover .submenu {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block; /* importante para que no haya espacios extra */
+    display: block; 
 }
 
 
@@ -604,7 +605,7 @@ footer .btn-contacto:hover {
     CARRITO
 ---------------------------------------------------------------- */
 .carrito {
-    max-width: 900px;
+    max-width: auto;
     margin: 50px auto;
     background: #fff;
     padding: 30px;
@@ -757,4 +758,103 @@ footer .btn-contacto:hover {
         flex-direction: column;
         gap: 10px;
     }
+}
+
+
+/* =============================================================
+   Estilos para la Página de Login (LO QUE FALTABA)
+================================================================ */
+
+.login-form-container {
+    max-width: 450px;   /* Ancho del contenedor */
+    margin: 50px auto;  
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-sizing: border-box; /* Importante */
+}
+
+.login-form-container h2 {
+    text-align: center;
+    color: #444;
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 2rem;
+}
+
+/* El formulario interno */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacio entre los campos */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Estilo para inputs con error */
+.form-group input.input-error {
+    border-color: #ff4d4d;
+    background-color: #ffeaea;
+}
+
+/* Mensaje de error */
+.error-message {
+    color: #ff4d4d;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+/* Botón de Entrar */
+.login-form-container button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-form-container button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+/* Estilo para botón deshabilitado */
+.login-form-container button[type="submit"]:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+/* Enlace de Registro */
+.registro-link {
+    text-align: center;
+    margin-top: 20px;
+    color: #555;
+}
+
+.registro-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.registro-link a:hover {
+    text-decoration: underline;
 }

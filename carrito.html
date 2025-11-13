@@ -24,7 +24,7 @@
         </ul>
     </nav>
 </header>
-
+<!---------------------------------------- CARRITO -------------------------------------->
 <section class="carrito">
     <h2>🛍 Tu carrito</h2>
     <div id="carrito-lista"></div>
@@ -36,9 +36,12 @@
     </div>
 
 </section>
+<!---------------------------------------- FIN CARRITO -------------------------------------->
 
+<!---------------------------------------- Llamado a JS ------------------------------------->
 <script src="carrito.js"></script>
 <script>
+
     // Mostrar productos del carrito
     document.addEventListener("DOMContentLoaded", () => {
         const lista = document.getElementById("carrito-lista");
@@ -68,7 +71,7 @@
 
         total.textContent = `Total: $${totalCompra.toFixed(2)}`;
     });
-
+        /*  Funcion Dell Cart Item */
     function eliminarItem(index) {
         let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
         carrito.splice(index, 1);
@@ -76,6 +79,5 @@
         location.reload();
     }
 </script>
-
 </body>
 </html>

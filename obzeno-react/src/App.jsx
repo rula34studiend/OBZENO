@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react';
-import './App.css'; 
+import React, { useEffect, useState } from 'react';
+import './App.css';
 import 'remixicon/fonts/remixicon.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
+// IMPORTACION DE NUEVOS COMPONENTES
+import CarritoPage from './CarritoPage';
+import WishlistPage from './WishlistPage';
+import LoginPage from './LoginPage';
 
 // =================================================================
-// 🚨 CORRECCIÓN: IMPORTAR TODAS LAS IMÁGENES DESDE src/assets/img
+// IMPORTACIONES DE IMAGENES Y PRODUCTOS
 // =================================================================
 
 // CARRUSEL
@@ -30,54 +34,91 @@ import Oferta6 from './assets/OFERTAS/Oferta6.jpg';
 import Oferta7 from './assets/OFERTAS/Oferta7.jpg';
 import Oferta8 from './assets/OFERTAS/Oferta8.jpg';
 
-function App() {
-    
-    // Este useEffect inicializa el carrusel DESPUÉS de que se renderiza el HTML.
-    useEffect(() => {
-    if (window.Swiper) {
-        // Asegúrate de que esta configuración es correcta
-        const swiper = new window.Swiper('.swiper', {
-            loop: true,
-            // 🚨 ESTO ES CRUCIAL PARA LA NAVEGACIÓN MANUAL
-            navigation: { 
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            // 🚨 ESTO ES CRUCIAL PARA EL AVANCE AUTOMÁTICO (autoplay)
-            autoplay: {
-                delay: 3000, // Cambia cada 5 segundos (por ejemplo)
-                disableOnInteraction: true, // Continúa deslizando incluso si el usuario interactúa
-            },
-            // Otros parámetros (como pagination, effect, etc., si los tenías)
-            // ... 
-        });
+const PRODUCTOS_DESTACADOS = [
+    { id: 1, nombre: "BEAST BREATHING", precio: 270.00, img: Destacado1, tipo: 'DESTACADO' },
+    { id: 2, nombre: "RETRO GAMES", precio: 270.00, img: Destacado2, tipo: 'DESTACADO' },
+    { id: 3, nombre: "VENDETTA", precio: 270.00, img: Destacado3, tipo: 'DESTACADO' },
+];
 
-        return () => {
-            swiper.destroy();
-        };
-    } else {
-        console.error("Error: La biblioteca Swiper no se encontró.");
-    }
-}, []);
+const PRODUCTOS_OFERTAS = [
+    { id: 4, nombre: "A clockwork orange", precio: 270.00, img: Oferta1, tipo: 'OFERTA' },
+    { id: 5, nombre: "VIRGEN CARAS", precio: 270.00, img: Oferta2, tipo: 'OFERTA' },
+    { id: 6, nombre: "ROBERT JOHNSON", precio: 270.00, img: Oferta3, tipo: 'OFERTA' },
+    { id: 7, nombre: "REBEL FORCES", precio: 270.00, img: Oferta4, tipo: 'OFERTA' },
+    { id: 8, nombre: "GHOST 2025", precio: 270.00, img: Oferta5, tipo: 'OFERTA' },
+    { id: 9, nombre: "KILLERS VIÑETAS", precio: 270.00, img: Oferta6, tipo: 'OFERTA' },
+    { id: 10, nombre: "APROBADO POR CHAYANNE", precio: 270.00, img: Oferta7, tipo: 'OFERTA' },
+    { id: 11, nombre: "LACAN", precio: 270.00, img: Oferta8, tipo: 'OFERTA' },
+];
+
+export const TODOS_LOS_PRODUCTOS = [...PRODUCTOS_DESTACADOS, ...PRODUCTOS_OFERTAS];
+
+
+function App() {
+
+    // ESTADOS GLOBALES
+    const [carrito, setCarrito] = useState([]);
+    const [wishlist, setWishlist] = useState([]);
+    // ESTADO DE NAVEGACION
+    const [paginaActual, setPaginaActual] = useState('HOME');
+
+    // LOGICA DE NAVEGACION
+    const navegarA = (pagina) => {
+        setPaginaActual(pagina);
+    };
+
+    // LOGICA DE WISHLIST
+    const handleToggleWishlist = (productId) => {
+        const isWishlisted = wishlist.includes(productId);
+        if (isWishlisted) {
+            setWishlist(wishlist.filter(id => id !== productId));
+        } else {
+            setWishlist([...wishlist, productId]);
+        }
+    };
+
+    // L
+    // LOGICA DE CARRITO PARA AÑADIR
+    const handleAddToCart = (productId) => {
+        const productoExistente = carrito.find(item => item.id === productId);
+        if (productoExistente) {
+            setCarrito(carrito.map(item =>
+                item.id === productId ? { ...item, cantidad: item.cantidad + 1 } : item
+            ));
+        } else {
+            const nuevoProducto = TODOS_LOS_PRODUCTOS.find(p => p.id === productId);
+            setCarrito([...carrito, { ...nuevoProducto, cantidad: 1 }]);
+        }
+    };
+
+    // LOGICA DE CARRITO PARA ELIMINAR
+    const handleRemoveFromCart = (productId) => {
+        setCarrito(carrito.filter(item => item.id !== productId));
+    };
+
+    // Inicializacion del Carrusel
+    useEffect(() => {
+        // ... (Tu código de inicialización de Swiper)
+    }, []);
 
     const scrollToOfertas = () => {
+        // La sección de ofertas ahora está dentro del wrapper, por lo que se desplazará correctamente
         document.getElementById('ofertas-especiales').scrollIntoView({ behavior: 'smooth' });
     };
 
-    const handleAddToCart = (nombre, precio, img) => {
-        // Implementa tu lógica de carrito con estado de React aquí
-        console.log(`Agregando ${nombre} con precio ${precio} y imagen ${img} al carrito.`);
-    };
 
     return (
         <div className="App">
+
+            {/* HEADER Y NAVEGACIÓN - FUERA DEL WRAPPER PARA ANCHO COMPLETO */}
             <header>
                 <div className="logo">
                     <h1>OBZENO</h1>
                 </div>
                 <nav>
                     <ul>
-                        <li><a href="index.html">INICIO</a></li>
+                        {/* NAVEGACIÓN HOME */}
+                        <li><a href="#" onClick={() => navegarA('HOME')}>INICIO</a></li>
                         <li>
                             <a href="#">TIENDA DE ROPA</a>
                             <ul className="submenu">
@@ -91,199 +132,155 @@ function App() {
                         <li><a href="#">ROPA DE PELICULAS</a></li>
                         <li><a href="#">ROPA DE ANIME</a></li>
                         <li><a href="#">FIGURAS</a></li>
-                        <li><a href="#">INICIAR SESION</a></li>
-                        <a href="carrito.html" className="cartTab" id="cartLink" aria-label="Ver carrito">
+                        {/* NAVEGACIÓN LOGIN */}
+                        <li><a href="#" onClick={() => navegarA('LOGIN')}>INICIAR SESION</a></li>
+
+                        {/* NAVEGACIÓN CARRITO */}
+                        <a href="#" className="cartTab" id="cartLink" aria-label="Ver carrito" onClick={() => navegarA('CARRITO')}>
                             <i className="ri-shopping-cart-line"></i>
-                            <div className="cart-item-count" id="cartCount">0</div>
+                            <div className="cart-item-count" id="cartCount">{carrito.length}</div>
                         </a>
+
+                        {/* NAVEGACIÓN WISHLIST */}
+                        <div className="wishlist-count-display" onClick={() => navegarA('WISHLIST')}>
+                            <i className="ri-heart-line"></i>
+                            <div className="wishlist-item-count">{wishlist.length}</div>
+                        </div>
                     </ul>
                 </nav>
             </header>
 
-            <section className="hero">
-                <div className="hero-content">
-                    <h4>BIENVENIDOS A OBZENO</h4>
-                    <button onClick={scrollToOfertas}>
-                        VER OFERTAS ESPECIALES
-                    </button>
-                </div>
-            </section>
-
-            <section className="carrusel">
-                <div className="swiper">
-                    <div className="swiper-wrapper">
-                        {/* USO DE VARIABLES IMPORTADAS */}
-                        <div className="swiper-slide"><img src={Carrusel1} alt="Imagen 1" /></div>
-                        <div className="swiper-slide"><img src={Carrusel2} alt="Imagen 2" /></div>
-                        <div className="swiper-slide"><img src={Carrusel3} alt="Imagen 3" /></div>
-                        <div className="swiper-slide"><img src={Carrusel4} alt="Imagen 4" /></div>
-                    </div>
-                    <div className="swiper-button-next"></div>
-                    <div className="swiper-button-prev"></div>
-                </div>
-            </section>
-
-            <section className="procutos-destacados">
-                <div className="Productos-destacados">
-                    <h4>OBZENO</h4>
-                    <h5>PRODUCTOS DESTACADOS</h5>
-                </div>
-                <div className="productos">
-
-                    <div className="producto">
-                        {/* USO DE VARIABLES IMPORTADAS */}
-                        <img src={Destacado1} alt="Camiseta geek 1" />
-                        <h3>BEAST BREATHING</h3>
-                        <p className="precio"> $270.00 </p>
-                        <button 
-                            className="agregar-carrito" 
-                            onClick={() => handleAddToCart("BEAST BREATHING", "270.00", Destacado1)}
-                        >
-                            AGREGAR AL CARRITO
+            {/* HERO - FUERA DEL WRAPPER PARA ANCHO COMPLETO */}
+            {paginaActual === 'HOME' && (
+                <section className="hero">
+                    <div className="hero-content">
+                        <h4>BIENVENIDOS A OBZENO</h4>
+                        <button onClick={scrollToOfertas}>
+                            VER OFERTAS ESPECIALES
                         </button>
                     </div>
+                </section>
+            )}
 
-                    <div className="producto">
-                        {/* USO DE VARIABLES IMPORTADAS */}
-                        <img src={Destacado2} alt="Camiseta geek 1" />
-                        <h3>RETRO GAMES</h3>
-                        <p className="precio"> $270.00 </p>
-                        <button 
-                            className="agregar-carrito" 
-                            onClick={() => handleAddToCart("RETRO GAMES", "270.00", Destacado2)}
-                        >
-                            AGREGAR AL CARRITO
-                        </button>
+            {/* CARRUSEL - FUERA DEL WRAPPER PARA ANCHO COMPLETO */}
+            {paginaActual === 'HOME' && (
+                <section className="carrusel">
+                    <div className="swiper">
+                        <div className="swiper-wrapper">
+                            <div className="swiper-slide"><img src={Carrusel1} alt="Imagen 1" /></div>
+                            <div className="swiper-slide"><img src={Carrusel2} alt="Imagen 2" /></div>
+                            <div className="swiper-slide"><img src={Carrusel3} alt="Imagen 3" /></div>
+                            <div className="swiper-slide"><img src={Carrusel4} alt="Imagen 4" /></div>
+                        </div>
+                        <div className="swiper-button-next"></div>
+                        <div className="swiper-button-prev"></div>
                     </div>
+                </section>
+            )}
 
-                    <div className="producto">
-                        {/* USO DE VARIABLES IMPORTADAS */}
-                        <img src={Destacado3} alt="Camiseta geek 1" />
-                        <h3>VENDETTA</h3>
-                        <p className="precio"> $270.00 </p>
-                        <button 
-                            className="agregar-carrito" 
-                            onClick={() => handleAddToCart("VENDETTA", "270.00", Destacado3)}
-                        >
-                            AGREGAR AL CARRITO
-                        </button>
-                    </div>
 
-                    <div id="carrito-contenedor"></div>
-                </div>
-            </section>
+            {/* ============================================== */}
+            {/* CONTENEDOR GENERAL PARA CONTENIDO LIMITADO/CENTRADO */}
+            {/* ============================================== */}
+            <div className="main-content-wrapper">
 
-            <section className="ofertas-especiales" id="ofertas-especiales">
-                <h2> OFERTAS ESPECIALES </h2>
-                <div className="productos">
-                    
-                    <div className="producto">
-                        {/* USO DE VARIABLES IMPORTADAS */}
-                        <img src={Oferta1} alt="Camiseta geek 1" />
-                        <h3>A clockwork orange</h3>
-                        <p className="precio"> $270.00 </p>
-                        <button 
-                            className="agregar-carrito" 
-                            onClick={() => handleAddToCart("A clockwork orange", "270.00", Oferta1)}
-                        >
-                            AGREGAR AL CARRITO
-                        </button>
-                    </div>
-                    
-                    <div className="producto">
-                        {/* USO DE VARIABLES IMPORTADAS */}
-                        <img src={Oferta2} alt="Camiseta geek 1" />
-                        <h3>VIRGEN CARAS</h3>
-                        <p className="precio"> $270.00 </p>
-                        <button 
-                            className="agregar-carrito" 
-                            onClick={() => handleAddToCart("VIRGEN CARAS", "270.00", Oferta2)}
-                        >
-                            AGREGAR AL CARRITO
-                        </button>
-                    </div>
-                    
-                    <div className="producto">
-                        {/* USO DE VARIABLES IMPORTADAS */}
-                        <img src={Oferta3} alt="Camiseta geek 1" />
-                        <h3>ROBERT JOHNSON</h3>
-                        <p className="precio"> $270.00 </p>
-                        <button 
-                            className="agregar-carrito" 
-                            onClick={() => handleAddToCart("ROBERT JOHNSON", "270.00", Oferta3)}
-                        >
-                            AGREGAR AL CARRITO
-                        </button>
-                    </div>
+                {paginaActual === 'HOME' && (
+                    <React.Fragment>
+                        {/* SECCIONES DE PRODUCTOS DENTRO DEL WRAPPER */}
+                        <section className="procutos-destacados">
+                            <div className="Productos-destacados">
+                                <h4>OBZENO</h4>
+                                <h5>PRODUCTOS DESTACADOS</h5>
+                            </div>
 
-                    <div className="producto">
-                        {/* USO DE VARIABLES IMPORTADAS */}
-                        <img src={Oferta4} alt="Camiseta geek 1" />
-                        <h3>REBEL FORCES</h3>
-                        <p className="precio"> $270.00 </p>
-                        <button 
-                            className="agregar-carrito" 
-                            onClick={() => handleAddToCart("REBEL FORCES", "270.00", Oferta4)}
-                        >
-                            AGREGAR AL CARRITO
-                        </button>
-                    </div>
+                            <div className="productos">
+                                {PRODUCTOS_DESTACADOS.map(producto => (
+                                    <div className="producto" key={producto.id}>
 
-                    <div className="producto">
-                        {/* USO DE VARIABLES IMPORTADAS */}
-                        <img src={Oferta5} alt="Camiseta geek 1" />
-                        <h3>GHOST 2025</h3>
-                        <p className="precio"> $270.00 </p>
-                        <button 
-                            className="agregar-carrito" 
-                            onClick={() => handleAddToCart("GHOST 2025", "270.00", Oferta5)}
-                        >
-                            AGREGAR AL CARRITO
-                        </button>
-                    </div>
+                                        {/* 🚨 BOTÓN DE WISHLIST MODIFICADO 🚨 */}
+                                        <button
+                                            className={`wishlist-button ${wishlist.includes(producto.id) ? 'active' : ''}`}
+                                            onClick={() => handleToggleWishlist(producto.id)}
+                                        >
+                                            <i className={wishlist.includes(producto.id) ? "ri-heart-fill" : "ri-heart-line"}></i>
+                                            {wishlist.includes(producto.id) ? " EN WISHLIST" : " AÑADIR A WISHLIST"}
+                                        </button>
+                                        {/* 🚨 FIN DEL BOTÓN DE WISHLIST MODIFICADO 🚨 */}
 
-                    <div className="producto">
-                        {/* USO DE VARIABLES IMPORTADAS */}
-                        <img src={Oferta6} alt="Camiseta geek 1" />
-                        <h3>KILLERS VIÑETAS</h3>
-                        <p className="precio"> $270.00 </p>
-                        <button 
-                            className="agregar-carrito" 
-                            onClick={() => handleAddToCart("KILLERS VIÑETAS", "270.00", Oferta6)}
-                        >
-                            AGREGAR AL CARRITO
-                        </button>
-                    </div>
+                                        <img src={producto.img} alt={producto.nombre} />
+                                        <h3>{producto.nombre}</h3>
+                                        <p className="precio"> ${producto.precio.toFixed(2)} </p>
+                                        <button
+                                            className="agregar-carrito"
+                                            onClick={() => handleAddToCart(producto.id)}
+                                        >
+                                            AGREGAR AL CARRITO
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
 
-                    <div className="producto">
-                        {/* USO DE VARIABLES IMPORTADAS */}
-                        <img src={Oferta7} alt="Camiseta geek 1" />
-                        <h3>APROBADO POR CHAYANNE</h3>
-                        <p className="precio"> $270.00 </p>
-                        <button 
-                            className="agregar-carrito" 
-                            onClick={() => handleAddToCart("APROBADO POR CHAYANNE", "270.00", Oferta7)}
-                        >
-                            AGREGAR AL CARRITO
-                        </button>
-                    </div>
+                        <section className="ofertas-especiales" id="ofertas-especiales">
+                            <h2> OFERTAS ESPECIALES </h2>
 
-                    <div className="producto">
-                        {/* USO DE VARIABLES IMPORTADAS */}
-                        <img src={Oferta8} alt="Camiseta geek 1" />
-                        <h3>LACAN</h3>
-                        <p className="precio"> $270.00 </p>
-                        <button 
-                            className="agregar-carrito" 
-                            onClick={() => handleAddToCart("LACAN", "270.00", Oferta8)}
-                        >
-                            AGREGAR AL CARRITO
-                        </button>
-                    </div>
+                            <div className="productos">
+                                {PRODUCTOS_OFERTAS.map(producto => (
+                                    <div className="producto" key={producto.id}>
 
-                </div>
-            </section>
+                                        {/* 🚨 BOTÓN DE WISHLIST MODIFICADO 🚨 */}
+                                        <button
+                                            className={`wishlist-button ${wishlist.includes(producto.id) ? 'active' : ''}`}
+                                            onClick={() => handleToggleWishlist(producto.id)}
+                                        >
+                                            <i className={wishlist.includes(producto.id) ? "ri-heart-fill" : "ri-heart-line"}></i>
+                                            {wishlist.includes(producto.id) ? " EN WISHLIST" : " AÑADIR A WISHLIST"}
+                                        </button>
+                                        {/* 🚨 FIN DEL BOTÓN DE WISHLIST MODIFICADO 🚨 */}
 
+                                        <img src={producto.img} alt={producto.nombre} />
+                                        <h3>{producto.nombre}</h3>
+                                        <p className="precio"> ${producto.precio.toFixed(2)} </p>
+                                        <button
+                                            className="agregar-carrito"
+                                            onClick={() => handleAddToCart(producto.id)}
+                                        >
+                                            AGREGAR AL CARRITO
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    </React.Fragment>
+                )}
+
+                {/* PÁGINAS SECUNDARIAS DENTRO DEL WRAPPER */}
+                {paginaActual === 'CARRITO' && (
+                    <CarritoPage
+                        carrito={carrito}
+                        handleRemoveFromCart={handleRemoveFromCart}
+                        navegarA={navegarA}
+                    />
+                )}
+
+                {paginaActual === 'WISHLIST' && (
+                    <WishlistPage
+                        wishlist={wishlist}
+                        todosProductos={TODOS_LOS_PRODUCTOS}
+                        handleToggleWishlist={handleToggleWishlist}
+                        handleAddToCart={handleAddToCart}
+                        navegarA={navegarA}
+                    />
+                )}
+
+                {paginaActual === 'LOGIN' && (
+                    <LoginPage navegarA={navegarA} />
+                )}
+
+            </div> {/* CIERRE DEL CONTENEDOR GENERAL */}
+
+
+            {/* FOOTER - FUERA DEL WRAPPER PARA ANCHO COMPLETO */}
             <footer>
                 <p>&copy; 2025 OBZENO. Todos los derechos reservedos por R34.</p>
                 <a href="contacto.html" className="btn-contacto">CONTACTAR</a>
