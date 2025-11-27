@@ -8,8 +8,21 @@
     <script src="js/carrito.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script>
+        function getTotalCount() {
+            try {
+                const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+                return carrito.reduce((acc, item) => acc + item.cantidad, 0);
+            } catch (e) {
+                console.error("Error al leer el carrito de localStorage:", e);
+                return 0;
+            }
+        }
+    </script>
+    <script src="js/carrito.js"></script>
 </head>
-<body>
+
+<body x-data="{carritoCount: getTotalCount(), wishlistCount: 0}">
 
 <!/* -----------------------------------------------------------
     BARRA DE NAVEGACION
@@ -37,11 +50,11 @@
         <li><a href="login.html">INICIAR SESION</a></li>
         <a href="wishlist.html" class="wishlist-count-display">
         <i class="ri-heart-line"></i>
-        <div class="wishlist-item-count" id="wishlistCount">0</div>
+        <div class="wishlist-item-count" x-text="wishlistCount">0</div>
     </a>
         <a href="carrito.html" class="cartTab" id="cartLink">
             <i class="ri-shopping-cart-line"></i>
-            <div class="cart-item-count" id="cartCount">0</div>
+            <div class="cart-item-count" x-text="carritoCount">0</div>
         </a>
     </ul>
 </nav>
@@ -93,13 +106,19 @@
     ////////////////////////////////////////////////// */>
 
         <div class="producto">
-            <button class ="wishlist-btn" data-id-producto="BEAST BREATHING">
-                <i class="ri-heart-line"></i>AGREGAR AL WISHLIST
+            <button class ="wishlist-btn" data-id-producto="BEAST BREATHING"
+                x-data="{ active: false }"
+                @click="active = !active; active ? wishlistCount++ : wishlistCount--"
+                class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
             </button>
+
             <img src="img/DESTACADOS/Destacado1.jpg" alt="Camiseta geek 1">
             <h3>BEAST BREATHING</h3>
             <p class="precio"> $270.00 </p>
-            <button class="agregar-carrito" data-nombre="BEAST BREATHING" data-precio="270.00" data-img="img/DESTACADOS/Destacado1.jpg">
+            <button class="agregar-carrito" data-nombre="BEAST BREATHING" data-precio="270.00" data-img="img/DESTACADOS/Destacado1.jpg"
+            @click="carritoCount++">
                 <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
             </button>
         </div>
@@ -218,9 +237,7 @@
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="js/CARRUSEL.js"></script>
-<script src="js/contador-carrito.js"></script>
-
-
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 </body>
 </html>

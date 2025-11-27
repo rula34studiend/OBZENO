@@ -4,10 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito de compras</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="css/styles.css">
+    <script>
+        function getTotalCount() {
+            try {
+                const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+                return carrito.reduce((acc, item) => acc + item.cantidad, 0);
+            } catch (e) {
+                console.error("Error al leer el carrito de localStorage:", e);
+                return 0;
+            }
+        }
+    </script>
 </head>
-<body>
 
+<body x-data="{carritoCount: getTotalCount(), wishlistCount: 0}">
+
+<!/* -----------------------------------------------------------
+BARRA DE NAVEGACION
+---------------------------------------------------------------*/>
 <header>
     <div class="logo">
         <h1>OBZENO</h1>
@@ -15,12 +32,28 @@
     <nav>
         <ul>
             <li><a href="index.html">INICIO</a></li>
-            <li><a href="#">TIENDA</a></li>
-            <li><a href="#">INICIAR SESIÓN</a></li>
-            <div class="cartTab">
+            <li>
+                <a href="#">TIENDA DE ROPA</a>
+                <ul class="submenu">
+                    <li><a href="hombre.html">HOMBRES</a></li>
+                    <li><a href="#">MUJERES</a></li>z|
+                    <li><a href="#">NIÑO</a></li>
+                    <li><a href="#">SUDADERAS</a></li>
+                    <li><a href="#">TENIS</a></li>
+                </ul>
+            </li>
+            <li><a href="#">ROPA DE PELICULAS</a></li>
+            <li><a href="#">ROPA DE ANIME</a></li>
+            <li><a href="#">FIGURAS</a></li>
+            <li><a href="login.html">INICIAR SESION</a></li>
+            <a href="wishlist.html" class="wishlist-count-display">
+                <i class="ri-heart-line"></i>
+                <div class="wishlist-item-count" x-text="wishlistCount">0</div>
+            </a>
+            <a href="carrito.html" class="cartTab" id="cartLink">
                 <i class="ri-shopping-cart-line"></i>
-                <div class="cart-item-count"></div>
-            </div>
+                <div class="cart-item-count" x-text="carritoCount">0</div>
+            </a>
         </ul>
     </nav>
 </header>
@@ -79,5 +112,7 @@
         location.reload();
     }
 </script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
