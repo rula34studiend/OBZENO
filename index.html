@@ -34,16 +34,19 @@
         <li><a href="#">ROPA DE PELICULAS</a></li>
         <li><a href="#">ROPA DE ANIME</a></li>
         <li><a href="#">FIGURAS</a></li>
-        <li><a href="#">INICIAR SESION</a></li>
-
-        <!-- Carrito de compras -->
-        <a href="carrito.html" class="cartTab" id="cartLink" aria-label="Ver carrito">
+        <li><a href="login.html">INICIAR SESION</a></li>
+        <a href="wishlist.html" class="wishlist-count-display">
+        <i class="ri-heart-line"></i>
+        <div class="wishlist-item-count" id="wishlistCount">0</div>
+    </a>
+        <a href="carrito.html" class="cartTab" id="cartLink">
             <i class="ri-shopping-cart-line"></i>
             <div class="cart-item-count" id="cartCount">0</div>
         </a>
     </ul>
 </nav>
-</header>
+    </header>
+
 <!/* ------------------------------------------------------------
     BOTON QUE DIRECCIONA EL APARTADO DE OFERTAS
 -------------------------------------------------------------- */>
@@ -90,10 +93,15 @@
     ////////////////////////////////////////////////// */>
 
         <div class="producto">
+            <button class ="wishlist-btn" data-id-producto="BEAST BREATHING">
+                <i class="ri-heart-line"></i>AGREGAR AL WISHLIST
+            </button>
             <img src="img/DESTACADOS/Destacado1.jpg" alt="Camiseta geek 1">
             <h3>BEAST BREATHING</h3>
             <p class="precio"> $270.00 </p>
-            <button class="agregar-carrito" data-nombre="BEAST BREATHING" data-precio="270.00" data-img="img/DESTACADOS/Destacado1.jpg">AGREGAR AL CARRITO</button>
+            <button class="agregar-carrito" data-nombre="BEAST BREATHING" data-precio="270.00" data-img="img/DESTACADOS/Destacado1.jpg">
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
         </div>
 
         <!/ /////////////////////////////////////
