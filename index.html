@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OBZENO</title>
     <link rel="stylesheet" href="css/styles.css">
-    <script src="js/carrito.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <script>
@@ -18,11 +17,20 @@
                 return 0;
             }
         }
+        function getWishlistCount() {
+            try {
+                const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+                return wishlist.length;
+            } catch (e) {
+                return 0;
+            }
+        }
     </script>
     <script src="js/carrito.js"></script>
+    <script src="js/wishlist.js"></script>
 </head>
 
-<body x-data="{carritoCount: getTotalCount(), wishlistCount: 0}">
+<body x-data="{carritoCount: getTotalCount(), wishlistCount: getTotalCount()}">
 
 <!/* -----------------------------------------------------------
     BARRA DE NAVEGACION
@@ -38,7 +46,7 @@
             <a href="#">TIENDA DE ROPA</a>
             <ul class="submenu">
                 <li><a href="hombre.html">HOMBRES</a></li>
-                <li><a href="#">MUJERES</a></li>z|
+                <li><a href="#">MUJERES</a></li>
                 <li><a href="#">NIÑO</a></li>
                 <li><a href="#">SUDADERAS</a></li>
                 <li><a href="#">TENIS</a></li>
@@ -107,9 +115,10 @@
 
         <div class="producto">
             <button class ="wishlist-btn" data-id-producto="BEAST BREATHING"
-                x-data="{ active: false }"
-                @click="active = !active; active ? wishlistCount++ : wishlistCount--"
-                class="{'active': active}">
+                x-data="{ active: getWishlist().some(p => p.id === 'BEAST BREATHING') }"
+                @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('BEAST BREATHING', 'BEAST BREATHING', 270.00, 'img/DESTACADOS/Destacado1.jpg');"
+                :class="{'active': active}">
                 <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
                 <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
             </button>

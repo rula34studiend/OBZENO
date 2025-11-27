@@ -801,6 +801,108 @@ footer .btn-contacto:hover {
     background-color: #218838;
 }
 
+/* -------------------------------------------------------------
+   Wishlist
+------------------------------------------------------------- */
+.wishlist-page {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.wishlist-page h2 {
+    text-align: center;
+    color: #b60000; /* Color distintivo para Wishlist */
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+}
+
+.productos-wishlist-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Una columna por defecto */
+    gap: 20px;
+}
+
+/* item Wishlist */
+.wishlist-item {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    background: rgba(249, 249, 249, 0.51);
+    transition: box-shadow 0.3s;
+}
+
+.wishlist-item:hover {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.wishlist-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.wishlist-info {
+    flex-grow: 1;
+}
+
+.wishlist-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.wishlist-info .precio-item {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #0c0c0c;
+}
+
+.wishlist-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.wishlist-actions button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.wishlist-actions .agregar-carrito-wishlist {
+    background-color: #28a745;
+    color: white;
+}
+
+.wishlist-actions .agregar-carrito-wishlist:hover {
+    background-color: #218838;
+}
+
+.wishlist-actions .eliminar-wishlist-item {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.wishlist-actions .eliminar-wishlist-item:hover {
+    background-color: #e03a3a;
+}
+
+.wishlist-vacia {
+    text-align: center;
+    padding: 50px;
+    color: #888;
+    font-size: 1.2rem;
+}
 /* ------------------------------
    RESPONSIVE
 ------------------------------- */
@@ -829,5 +931,23 @@ footer .btn-contacto:hover {
     .botones-carrito {
         flex-direction: column;
         gap: 10px;
+    }
+}
+@media (max-width: 768px) {
+    .wishlist-item {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    .wishlist-img {
+        margin-bottom: 10px;
+    }
+    .wishlist-actions {
+        width: 100%;
+        justify-content: space-around;
+        margin-top: 15px;
+    }
+    .wishlist-actions button {
+        flex: 1;
     }
 }
