@@ -678,66 +678,53 @@ footer .btn-contacto:hover {
 ---------------------------------------------------------------- */
 .carrito {
     max-width: 900px;
-    margin: 50px auto;
-    background: #fff;
+    margin: 40px auto;
     padding: 30px;
-    border-radius: 10px;
+    background-color: #fff;
+    border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .carrito h2 {
     text-align: center;
     color: #444;
-    margin-bottom: 20px;
-    font-size: 2rem;
+    margin-bottom: 30px;
 }
 
-#carrito-lista {
+.carrito-items {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
-/* ------------------------------
-   ITEMS DEL CARRITO
-------------------------------- */
+/* Estilo para cada item en el carrito */
 .carrito-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    background: #f8f8f8;
-    padding: 12px 20px;
+    justify-content: space-between; /* Distribuye los elementos */
+    border: 1px solid #eee;
+    padding: 15px;
     border-radius: 8px;
-    border: 1px solid #ddd;
-    transition: background 0.3s;
-    gap: 15px;
+    background: #fff;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
 }
 
-.carrito-item:hover {
-    background: #f1f1f1;
-}
-
-/* Imagen del producto */
 .carrito-img {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 20px;
 }
 
-/* Contenedor de texto */
 .carrito-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
+    flex-grow: 1; /* Permite que la info ocupe el espacio central */
+    min-width: 150px;
 }
 
 .carrito-info h4 {
-    margin: 0;
-    font-size: 1rem;
-    color: #333;
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
 }
 
 .carrito-info p {
@@ -746,35 +733,94 @@ footer .btn-contacto:hover {
     color: #555;
 }
 
-/* Botón de eliminar */
-.carrito-item button {
-    background-color: #ff4d4d;
-    border: none;
-    color: #fff;
-    padding: 8px 12px;
+/* 🚨 CONTROLES DE CANTIDAD (NUEVO) 🚨 */
+.carrito-cantidad-control {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    overflow: hidden; /* Para que los bordes se vean continuos */
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
-.carrito-item button:hover {
+.carrito-cantidad-control button {
+    background-color: #f0f0f0;
+    color: #333;
+    border: none;
+    padding: 8px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    line-height: 1; /* Iconos alineados */
+}
+
+.carrito-cantidad-control button:hover {
+    background-color: #ddd;
+}
+
+.carrito-cantidad-control .cantidad-display {
+    padding: 8px 15px;
+    font-weight: bold;
+    min-width: 20px;
+    text-align: center;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+/* Botón ELIMINAR */
+.eliminar-item {
+    background-color: #ff4d4d;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.2s;
+    margin-left: 15px;
+}
+
+.eliminar-item:hover {
     background-color: #e03a3a;
 }
+
 
 /* Total del carrito */
 #carrito-total {
     text-align: right;
-    margin-top: 25px;
-    font-size: 1.3rem;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #ddd;
+    font-size: 1.5rem;
     font-weight: bold;
-    color: #222;
+    color: #b60000; /* Color para destacar el total */
 }
 
-/* Carrito vacío */
-.carrito-vacio {
-    text-align: center;
-    font-size: 1.1rem;
-    color: #555;
+/* Responsive para Carrito */
+@media (max-width: 768px) {
+    .carrito-item {
+        flex-wrap: wrap; /* Permite que los elementos se muevan a la siguiente línea */
+        justify-content: flex-start;
+        gap: 15px;
+    }
+    .carrito-img {
+        width: 60px;
+        height: 60px;
+    }
+    .carrito-info {
+        flex-basis: 100%;
+        order: 1;
+    }
+    .carrito-cantidad-control {
+        order: 2;
+        margin-left: 0;
+        margin-right: auto; /* Mueve el control a la izquierda */
+    }
+    .eliminar-item {
+        order: 3;
+        margin-left: auto;
+    }
 }
 
 /* ------------------------------

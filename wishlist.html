@@ -31,7 +31,10 @@
     <script src="js/wishlist.js"></script>
 </head>
 
-<body x-data="{carritoCount: getTotalCount(), wishlistCount: getTotalCount()}">
+<body
+        x-data="{carritoCount: getTotalCount(), wishlistCount: getWishlistCount()}"
+        @cart-count-updated.window="carritoCount = $event.detail"
+        @wishlist-count-updated.window="wishlistCount = $event.detail">
 
 <!/* -----------------------------------------------------------
 BARRA DE NAVEGACION
@@ -79,11 +82,6 @@ BARRA DE NAVEGACION
         </div>
     </section>
 </div>
-
-<footer>
-    <p>&copy; 2025 OBZENO. Todos los derechos reservedos por R34.</p>
-    <a href="contacto.html" class="btn-contacto">CONTACTAR</a>
-</footer>
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="js/carrito.js"></script>

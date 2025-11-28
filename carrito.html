@@ -30,7 +30,10 @@
     <script src="js/wishlist.js"></script>
 </head>
 
-<body x-data="{carritoCount: getTotalCount(), wishlistCount: getTotalCount()}">
+<body
+        x-data="{carritoCount: getTotalCount(), wishlistCount: getWishlistCount()}"
+        @cart-count-updated.window="carritoCount = $event.detail"
+        @wishlist-count-updated.window="wishlistCount = $event.detail">
 
 <!/* -----------------------------------------------------------
 BARRA DE NAVEGACION
@@ -68,60 +71,52 @@ BARRA DE NAVEGACION
     </nav>
 </header>
 <!---------------------------------------- CARRITO -------------------------------------->
-<section class="carrito">
-    <h2>🛍 Tu carrito</h2>
-    <div id="carrito-lista"></div>
-    <h3 id="carrito-total"></h3>
+<div class="main-content-wrapper">
+    <section class="carrito" x-data="getCarritoItems()">
+        <h2>🛍️ Carrito de Compras</h2>
 
-    <div class="carrito-botones">
-        <a href="index.html" class="seguir">← Seguir comprando</a>
-        <a href="#" class="pagar">Ir a pagar 💳</a>
-    </div>
+        <div id="carrito-items-contenedor" class="carrito-items">
 
-</section>
-<!---------------------------------------- FIN CARRITO -------------------------------------->
+            <template x-if="carritoItems.length === 0">
+                <p class="carrito-vacio">Tu carrito está vacío 😢</p>
+            </template>
 
-<!---------------------------------------- Llamado a JS ------------------------------------->
-<script src="carrito.js"></script>
-<script>
+            <template x-for="(producto, index) in carritoItems" :key="index">
+                <div class="carrito-item">
+                    <img :src="producto.img" :alt="producto.nombre" class="carrito-img">
 
-    // Mostrar productos del carrito
-    document.addEventListener("DOMContentLoaded", () => {
-        const lista = document.getElementById("carrito-lista");
-        const total = document.getElementById("carrito-total");
+                    <div class="carrito-info">
+                        <h4 x-text="producto.nombre"></h4>
+                        <p>Precio Unitario: $<span x-text="producto.precio.toFixed(2)"></span></p>
+                        <p>Subtotal: $<span x-text="(producto.precio * producto.cantidad).toFixed(2)"></span></p>
+                    </div>
 
-        let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+                    <div class="carrito-cantidad-control">
+                        <button class="btn-cantidad-restar" @click="updateItemQuantity(index, -1)">
+                            <i class="ri-subtract-line"></i>
+                        </button>
+                        <span class="cantidad-display" x-text="producto.cantidad"></span>
+                        <button class="btn-cantidad-sumar" @click="updateItemQuantity(index, 1)">
+                            <i class="ri-add-line"></i>
+                        </button>
+                    </div>
 
-        if (carrito.length === 0) {
-            lista.innerHTML = "<p>Tu carrito está vacío 😢</p>";
-            total.textContent = "";
-            return;
-        }
+                    <button class="eliminar-item" @click="updateItemQuantity(index, 0)">
+                        <i class="ri-delete-bin-line"></i>
+                    </button>
+                </div>
+            </template>
 
-        let totalCompra = 0;
-        lista.innerHTML = "";
+        </div>
 
-        carrito.forEach((item, index) => {
-            const itemHTML = `
-            <div class="carrito-item">
-                <p><strong>${item.nombre}</strong> — $${item.precio} x ${item.cantidad}</p>
-                <button onclick="eliminarItem(${index})">Eliminar</button>
-            </div>
-        `;
-            lista.innerHTML += itemHTML;
-            totalCompra += item.precio * item.cantidad;
-        });
+        <h3 id="carrito-total">Total: $<span x-text="getTotal()"></span></h3>
 
-        total.textContent = `Total: $${totalCompra.toFixed(2)}`;
-    });
-        /*  Funcion Dell Cart Item */
-    function eliminarItem(index) {
-        let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-        carrito.splice(index, 1);
-        localStorage.setItem("carrito", JSON.stringify(carrito));
-        location.reload();
-    }
-</script>
+        <div class="botones-carrito">
+            <button @click="window.location.href='index.html'">CONTINUAR COMPRANDO</button>
+            <button class="pagar-btn">PAGAR AHORA</button>
+        </div>
+    </section>
+</div>
 
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>

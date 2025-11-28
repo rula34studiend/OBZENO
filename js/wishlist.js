@@ -6,52 +6,47 @@ function getWishlist() {
         return [];
     }
 }
+
 function saveWishlist(wishlist) {
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
+
+    window.dispatchEvent(new CustomEvent('wishlist-count-updated', {
+        detail: wishlist.length
+    }));
 }
 
-/**
- * Función global llamada por Alpine.js en los botones de producto.
- * Añade/elimina un producto de la wishlist y devuelve la nueva cuenta.
- */
 window.toggleWishlistAndGetNewCount = function (id, nombre, precio, img) {
     let wishlist = getWishlist();
-    const itemData = { id, nombre, precio, img };
+    // Aseguramos que el ID sea string para comparar consistentemente
+    const idString = String(id);
+    const itemData = { id: idString, nombre, precio, img };
 
-    const index = wishlist.findIndex(p => p.id === id);
+    const index = wishlist.findIndex(p => String(p.id) === idString);
 
     if (index > -1) {
-        // El producto ya existe, lo eliminamos
         wishlist.splice(index, 1);
         console.log(`Producto ${nombre} eliminado de wishlist.`);
     } else {
-        // El producto no existe, lo añadimos
         wishlist.push(itemData);
         console.log(`Producto ${nombre} añadido a wishlist.`);
     }
 
-    saveWishlist(wishlist);
-    return wishlist.length; // Devuelve la nueva cantidad total
+    saveWishlist(wishlist); // Esto dispara el evento automáticamente
+    return wishlist.length;
 };
 
-// Función para inicializar la WishlistCount de Alpine
 window.getWishlistCount = function () {
     return getWishlist().length;
 };
 
-
-// LÓGICA DE LA PÁGINA WISHLIST (DOM Manipulation)
-// -------------------------------------------------------------
-
 document.addEventListener("DOMContentLoaded", function() {
     const contenedorWishlist = document.getElementById("wishlist-items-contenedor");
 
-    // Función para renderizar la lista de deseos
+    if (!contenedorWishlist) return;
+
     function renderWishlistPage() {
         const wishlist = getWishlist();
-        if (!contenedorWishlist) return;
-
-        contenedorWishlist.innerHTML = ''; // Limpiar el contenedor
+        contenedorWishlist.innerHTML = ''; // Limpiar
 
         if (wishlist.length === 0) {
             contenedorWishlist.innerHTML = '<p class="wishlist-vacia">Tu lista de deseos está vacía. ¡Añade algunos productos!</p>';
@@ -82,46 +77,32 @@ document.addEventListener("DOMContentLoaded", function() {
             contenedorWishlist.appendChild(item);
         });
 
-        // Activar los eventos de los nuevos botones
         activateWishlistButtons();
     }
 
-    // Activar botones de ELIMINAR y AGREGAR AL CARRITO
     function activateWishlistButtons() {
-        // 1. Botones ELIMINAR
         document.querySelectorAll(".eliminar-wishlist-item").forEach(button => {
             button.addEventListener("click", (e) => {
-                const idToDelete = e.currentTarget.getAttribute("data-id");
+                const idToDelete = String(e.currentTarget.getAttribute("data-id"));
                 let wishlist = getWishlist();
 
-                wishlist = wishlist.filter(p => p.id !== idToDelete);
-                saveWishlist(wishlist);
-                renderWishlistPage(); // Volver a renderizar la página
+                wishlist = wishlist.filter(p => String(p.id) !== idToDelete);
 
-                // Opcional: Si Alpine.js está disponible, actualiza el contador en la barra
-                if (window.Alpine) {
-                    window.Alpine.store('wishlistState').count = wishlist.length;
-                }
+
+                saveWishlist(wishlist);
+
+                renderWishlistPage();
             });
         });
 
-        // 2. Botones AGREGAR AL CARRITO
         document.querySelectorAll(".agregar-carrito-wishlist").forEach(button => {
             button.addEventListener("click", (e) => {
                 const nombre = button.getAttribute("data-nombre");
                 const precio = parseFloat(button.getAttribute("data-precio"));
                 const img = button.getAttribute("data-img");
 
-                // Asumimos que window.addToCartAndGetNewCount existe en carrito.js
                 if (window.addToCartAndGetNewCount) {
-                    const newCount = window.addToCartAndGetNewCount(nombre, precio, img);
-
-                    // Opcional: Si Alpine.js está disponible, actualiza el contador de carrito en la barra
-                    if (window.Alpine) {
-                        // Asume que la variable global de Alpine se llama carritoCount
-                        document.body.__x.$data.carritoCount = newCount;
-                    }
-
+                    window.addToCartAndGetNewCount(nombre, precio, img);
                     alert(`Producto ${nombre} añadido al carrito!`);
                 }
             });

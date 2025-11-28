@@ -30,7 +30,10 @@
     <script src="js/wishlist.js"></script>
 </head>
 
-<body x-data="{carritoCount: getTotalCount(), wishlistCount: getTotalCount()}">
+<body
+        x-data="{carritoCount: getTotalCount(), wishlistCount: getWishlistCount()}"
+        @cart-count-updated.window="carritoCount = $event.detail"
+        @wishlist-count-updated.window="wishlistCount = $event.detail">
 
 <!/* -----------------------------------------------------------
     BARRA DE NAVEGACION
@@ -126,8 +129,8 @@
             <img src="img/DESTACADOS/Destacado1.jpg" alt="Camiseta geek 1">
             <h3>BEAST BREATHING</h3>
             <p class="precio"> $270.00 </p>
-            <button class="agregar-carrito" data-nombre="BEAST BREATHING" data-precio="270.00" data-img="img/DESTACADOS/Destacado1.jpg"
-            @click="carritoCount++">
+            <button class="agregar-carrito"
+                @click="carritoCount = addToCartAndGetNewCount('BEAST BREATHING', 270.00, 'img/DESTACADOS/Destacado1.jpg')">
                 <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
             </button>
         </div>
