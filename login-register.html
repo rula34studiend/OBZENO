@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login-register-obzeno</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/carrito.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script>
+        function getTotalCount() {
+            try {
+                const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+                return carrito.reduce((acc, item) => acc + item.cantidad, 0);
+            } catch (e) {
+                console.error("Error al leer el carrito de localStorage:", e);
+                return 0;
+            }
+        }
+        function getWishlistCount() {
+            try {
+                const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+                return wishlist.length;
+            } catch (e) {
+                return 0;
+            }
+        }
+    </script>
+    <script src="js/carrito.js"></script>
+    <script src="js/wishlist.js"></script>
+</head>
+
+<body
+        x-data="{carritoCount: getTotalCount(), wishlistCount: getWishlistCount()}"
+        @cart-count-updated.window="carritoCount = $event.detail"
+        @wishlist-count-updated.window="wishlistCount = $event.detail">
+
+<header>
+    <div class="logo">
+        <h1>OBZENO</h1>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="index.html">INICIO</a></li>
+            <li>
+                <a href="#">TIENDA DE ROPA</a>
+                <ul class="submenu">
+                    <li><a href="hombre.html">HOMBRES</a></li>
+                    <li><a href="#">MUJERES</a></li>
+                    <li><a href="#">NIÑO</a></li>
+                    <li><a href="#">SUDADERAS</a></li>
+                    <li><a href="#">TENIS</a></li>
+                </ul>
+            </li>
+            <li><a href="#">ROPA DE PELICULAS</a></li>
+            <li><a href="#">ROPA DE ANIME</a></li>
+            <li><a href="#">FIGURAS</a></li>
+            <li><a href="login.html">INICIAR SESION</a></li>
+            <a href="wishlist.html" class="wishlist-count-display">
+                <i class="ri-heart-line"></i>
+                <div class="wishlist-item-count" x-text="wishlistCount">0</div>
+            </a>
+            <a href="carrito.html" class="cartTab" id="cartLink">
+                <i class="ri-shopping-cart-line"></i>
+                <div class="cart-item-count" x-text="carritoCount">0</div>
+            </a>
+        </ul>
+    </nav>
+</header>
+
+<div class="main-content-wrapper">
+    <section class="login-container">
+        <div class="register-form-box" x-data="{
+                name: '',
+                lastname: '',
+                username: '',
+                email: '',
+                password: '',
+                passwordConfirm: '',
+                showPassword: false,
+                showPasswordConfirm: false,
+
+
+                isEmailInvalid() { return this.email.length > 0 && (!this.email.includes('@') || !this.email.includes('.')) },
+                isPasswordTooShort() { return this.password.length > 0 && this.password.length < 8 },
+                isUsernameTooLong() { return this.username.length > 16 },
+
+                passwordsMatch() {return this.password === this.passwordConfirm;},
+
+                isFormValid() {
+                    return this.name.length > 0 && this.lastname.length > 0 && this.username.length > 0 && !this.isUsernameTooLong() &&
+                           !this.isEmailInvalid() && this.password.length >= 8 && this.passwordsMatch();
+                },
+                submitForm() {
+                    if (this.isFormValid()) {
+                        alert('¡Registro exitoso! (Simulado). Redirigiendo a login...');
+                        window.location.href = 'login.html';
+                    } else {
+                        alert('Por favor, revisa los campos marcados con rojo y asegúrate de completar toda la información.');
+                    }
+                }
+            }">
+            <h2>📝 CREAR CUENTA</h2>
+
+            <form class="login-form" @submit.prevent="submitForm">
+
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label for="name">Nombre(s)</label>
+                        <input type="text" id="name" x-model="name" required autocomplete="name">
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="lastname">Apellidos</label>
+                        <input type="text" id="lastname" x-model="lastname" required autocomplete="family-name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Nombre de Usuario (Máx. 16 caracteres)</label>
+                    <input  type="text"
+                            id="username"
+                            x-model.debounce.500ms="username"
+                            :class="{ 'input-error': isUsernameTooLong() }"
+                            maxlength="16"
+                            required
+                            autocomplete="username"
+                    >
+                    <p x-show="isUsernameTooLong()" class="error-message">
+                        🚨 El nombre de usuario no puede exceder los 16 caracteres.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input  type="email"
+                            id="email"
+                            x-model.debounce.500ms="email"
+                            :class="{ 'input-error': isEmailInvalid() }"
+                            placeholder="tu.correo@ejemplo.com"
+                            required
+                            autocomplete="email"
+                    >
+                    <p x-show="isEmailInvalid()" class="error-message">
+                        🚨 Por favor, introduce un correo electrónico válido (ej. correo@dominio.com).
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña (Mín. 8 caracteres)</label>
+                    <div class="password-group">
+                        <input
+                                :type="showPassword ? 'text' : 'password'"
+                                id="password"
+                                x-model.debounce.500ms="password"
+                                :class="{ 'input-error': isPasswordTooShort() }"
+                                minlength="8"
+                                required autocomplete="new-password"
+                        >
+                        <button type="button" class="password-toggle" @click="showPassword = !showPassword" aria-label="Mostrar/Ocultar Contraseña">
+                            <i :class="showPassword ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
+                        </button>
+                    </div>
+                    <p x-show="isPasswordTooShort()" class="error-message">
+                        🚨 La contraseña debe tener al menos 8 caracteres.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="passwordConfirm">Confirmar Contraseña</label>
+                    <div class="password-group">
+                        <input
+                                :type="showPasswordConfirm ? 'text' : 'password'"
+                                id="passwordConfirm"
+                                x-model.debounce.500ms="passwordConfirm"
+                                required autocomplete="new-password"
+                                :class="{ 'input-error': passwordConfirm.length > 0 && !passwordsMatch() }"
+                        >
+                        <button type="button" class="password-toggle" @click="showPasswordConfirm = !showPasswordConfirm" aria-label="Mostrar/Ocultar Contraseña">
+                            <i :class="showPasswordConfirm ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
+                        </button>
+                    </div>
+                    <p x-show="passwordConfirm.length > 0 && !passwordsMatch()" class="error-message">
+                        🚨 Las contraseñas no coinciden.
+                    </p>
+                </div>
+
+                <button type="submit" class="btn-login-submit" :disabled="!isFormValid()">
+                    REGISTRARSE
+                </button>
+            </form>
+
+            <div class="register-prompt">
+                <p>¿Ya tienes una cuenta? </p>
+                <a href="login.html" class="btn-register-link">
+                    INICIAR SESIÓN
+                </a>
+            </div>
+        </div>
+
+    </section>
+</div>
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="js/carrito.js"></script>
+<script src="js/wishlist.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+</html>
