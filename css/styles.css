@@ -649,6 +649,97 @@ footer p {
 /* -------------------------------------------------------------
     CONTACTO
 ---------------------------------------------------------------- */
+.contacto-page {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.contacto-page h2 {
+    text-align: center;
+    color: #b60000;
+    margin-bottom: 10px;
+}
+
+.contacto-subtitulo {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.contact-form-box {
+    padding: 0;
+}
+
+.form-group textarea {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    resize: vertical;
+    font-family: Arial, sans-serif;
+}
+
+.contacto-page .btn-login-submit {
+    background-color: #28a745;
+}
+.contacto-page .btn-login-submit:hover {
+    background-color: #218838;
+}
+
+.form-group select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: white;
+}
+
+.form-group textarea {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    resize: vertical;
+    font-family: Arial, sans-serif;
+}
+
+.info-contacto {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+.info-contacto h3 {
+    color: #444;
+    margin-bottom: 15px;
+}
+
+.info-contacto p {
+    margin: 8px 0;
+    font-size: 1rem;
+    color: #666;
+}
+
+.info-contacto p i {
+    color: #b60000;
+    margin-right: 5px;
+}
+
+.info-contacto a {
+    color: #b60000;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.info-contacto a:hover {
+    color: #444;
+}
 
 footer {
     background-color: #222;
@@ -672,7 +763,6 @@ footer .btn-contacto {
 footer .btn-contacto:hover {
     background-color: #e65c00;
 }
-
 /* -------------------------------------------------------------
     CARRITO
 ---------------------------------------------------------------- */
