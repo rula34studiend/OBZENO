@@ -246,9 +246,9 @@ nav ul a.wishlist-count-display {
 }
 
 .wishlist-button {
-    background-color: #65fc49;
-    border: 1px solid #fc4949;
-    color: rgba(255, 255, 255, 0.6);
+    background-color: #c86464;
+    border: 1px solid #d86868;
+    color: rgb(255, 255, 255);
     padding: 5px 10px;
     margin-bottom: 10px;
     cursor: pointer;
