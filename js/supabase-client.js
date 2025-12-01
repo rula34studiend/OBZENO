@@ -9,7 +9,7 @@ async function loginConRedSocial(provider) {
     const { data, error } = await _supabase.auth.signInWithOAuth({
         provider: provider,
         options: {
-            redirectTo:'https://obzenoproject.netlify.app'
+            redirectTo:'https://obzenoproject.netlify.app/index.html'
         }
     });
     if (error) console.error('Error social:', error);
