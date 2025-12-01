@@ -518,6 +518,63 @@ nav ul li a:hover {
     color: #ffeb3b;
 }
 
+.user-menu-container {
+    margin-left: 15px;
+    position: relative;
+}
+
+.amazon-style-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: white;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: border-color 0.2s;
+}
+
+.amazon-style-user:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.user-icon i {
+    font-size: 1.6rem;
+}
+
+.user-text-stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.1;
+    max-width: 120px;
+}
+
+.greeting-small {
+    font-size: 0.75rem;
+    font-weight: normal;
+    color: #ccc;
+}
+
+.username-bold {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: white;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: capitalize;
+}
+
+
+.arrow-icon {
+    font-size: 0.8rem;
+    color: #ccc;
+    margin-top: 5px;
+}
+
 /* -------------------------------------------------------------
    Estilos de la Sección de Productos (Hombre)
 ------------------------------------------------------------- */
