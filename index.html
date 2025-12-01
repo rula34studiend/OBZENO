@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OBZENO</title>
     <link rel="stylesheet" href="css/styles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <script>
@@ -31,7 +35,25 @@
 </head>
 
 <body
-        x-data="{carritoCount: getTotalCount(), wishlistCount: getWishlistCount()}"
+        x-data="{carritoCount: getTotalCount(), wishlistCount: getWishlistCount(),
+        isLoggedIn: false,
+        userName: 'Invitado',
+
+        async init() {
+            await new Promise(r => setTimeout(r, 50));
+            const user = await window.getUsuarioActual();
+            if (user) {
+                this.isLoggedIn = true;
+                this.userName = user.displayName;
+            }
+            this.carritoCount = getTotalCount();
+            this.wishlistCount = getWishlistCount();
+        },
+        logout() {
+            window.cerrarSesion();
+        }
+    }"
+        x-init="init()"
         @cart-count-updated.window="carritoCount = $event.detail"
         @wishlist-count-updated.window="wishlistCount = $event.detail">
 
@@ -58,7 +80,18 @@
         <li><a href="#">ROPA DE PELICULAS</a></li>
         <li><a href="#">ROPA DE ANIME</a></li>
         <li><a href="#">FIGURAS</a></li>
-        <li><a href="login.html">INICIAR SESION</a></li>
+
+        <li x-show="isLoggedIn" class="user-menu" style="margin-left: 15px;">
+            <a href="#" x-text="'HOLA, ' + userName.toUpperCase()">HOLA, USUARIO</a>
+            <ul class="submenu" style="min-width: 160px;">
+                <li><a href="#" @click.prevent="logout()">Cerrar Sesión</a></li>
+            </ul>
+        </li>
+
+        <li x-show="!isLoggedIn" style="margin-left: 15px;">
+            <a href="login.html">INICIAR SESION</a>
+        </li>
+
         <a href="wishlist.html" class="wishlist-count-display">
         <i class="ri-heart-line"></i>
         <div class="wishlist-item-count" x-text="wishlistCount">0</div>

@@ -5,44 +5,44 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 const _supabase = createClient(supabaseUrl, supabaseKey);
 
+async function getUsuarioActual() {
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (!session) return null;
+
+    const { data: profile, error } = await _supabase
+        .from('profiles')
+        .select('username, full_name')
+        .eq('id', session.user.id)
+        .single();
+
+    if (error) {
+        console.error("Error al cargar perfil:", error);
+        return session.user;
+    }
+
+    return {
+        ...session.user,
+        displayName: profile.full_name || profile.username || 'Usuario'
+    };
+}
+
+async function cerrarSesion() {
+    const { error } = await _supabase.auth.signOut();
+    if (!error) window.location.href = 'index.html';
+}
+
+
 async function loginConRedSocial(provider) {
     const { data, error } = await _supabase.auth.signInWithOAuth({
         provider: provider,
         options: {
-            redirectTo:'https://obzenoproject.netlify.app'
+            redirectTo: 'https://obzenoproject.netlify.app'
         }
     });
     if (error) console.error('Error social:', error);
 }
 
-async function registrarUsuario(email, password, metadata) {
-    const { data, error } = await _supabase.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-            data: {
-                full_name: `${metadata.nombre} ${metadata.apellido}`,
-                username: metadata.username
-            }
-        }
-    });
-    return { data, error };
-}
-
-async function iniciarSesion(email, password) {
-    const { data, error } = await _supabase.auth.signInWithPassword({
-        email: email,
-        password: password
-    });
-    return { data, error };
-}
-
-async function cerrarSesion() {
-    await _supabase.auth.signOut();
-    window.location.href = 'index.html';
-}
-
-async function getUsuarioActual() {
-    const { data: { session } } = await _supabase.auth.getSession();
-    return session ? session.user : null;
-}
+window.getUsuarioActual = getUsuarioActual;
+window.cerrarSesion = cerrarSesion;
+window.loginConRedSocial = loginConRedSocial;
+window._supabase = _supabase;
