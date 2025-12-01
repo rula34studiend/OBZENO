@@ -203,62 +203,198 @@
     ////////////////////////////////////////////////// */>
 
     <div class="producto">
-        <img src="img/OFERTAS/Oferta1.jpg" alt="Camiseta geek 1">
+
+        <button class ="wishlist-button" data-id-producto="A clockwork orange"
+                x-data="{ active: getWishlist().some(p => p.id === 'A clockwork orange') }"
+                @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('A clockwork orange', 'A clockwork orange', 270.00, 'img/OFERTAS/Oferta1.jpg');"
+
+                :class="{'active': active}">
+            <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+            <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+        </button>
+
+        <img src="img/OFERTAS/Oferta1.jpg" alt="Camiseta geek Ofer1">
         <h3>A clockwork orange</h3>
         <p class="precio"> $270.00 </p>
-        <button class="agregar-carrito" data-nombre="A clockwork orange" data-precio="270.00">AGREGAR AL CARRITO</button>
+
+        <button class="agregar-carrito"
+
+                @click="carritoCount = addToCartAndGetNewCount('A clockwork orange', 270.00, 'img/OFERTAS/Oferta1.jpg')">
+
+            <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+        </button>
     </div>
 
     <!/ /////////////////////////////////////
     ////////////////////////////////////// */>
 
     <div class="producto">
-        <img src="img/OFERTAS/Oferta2.jpg" alt="Camiseta geek 1">
+
+        <button class ="wishlist-button" data-id-producto="VIRGEN CARAS"
+                x-data="{ active: getWishlist().some(p => p.id === 'VIRGEN CARAS') }"
+                @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('VIRGEN CARAS', 'VIRGEN CARAS', 270.00, 'img/OFERTAS/Oferta2.jpg');"
+
+                :class="{'active': active}">
+            <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+            <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+        </button>
+
+        <img src="img/OFERTAS/Oferta2.jpg" alt="Camiseta geek Ofer2">
         <h3>VIRGEN CARAS</h3>
         <p class="precio"> $270.00 </p>
-        <button class="agregar-carrito" data-nombre="VIRGEN CARAS" data-precio="270.00">AGREGAR AL CARRITO</button>
+
+        <button class="agregar-carrito"
+
+                @click="carritoCount = addToCartAndGetNewCount('VIRGEN CARAS', 270.00, 'img/OFERTAS/Oferta2.jpg')">
+
+            <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+        </button>
     </div>
 
     <div class="producto">
-        <img src="img/OFERTAS/Oferta3.jpg" alt="Camiseta geek 1">
+
+        <button class ="wishlist-button" data-id-producto="ROBERT JOHNSON"
+                x-data="{ active: getWishlist().some(p => p.id === 'ROBERT JOHNSON') }"
+                @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('ROBERT JOHNSON', 'ROBERT JOHNSON', 270.00, 'img/OFERTAS/Oferta3.jpg');"
+
+                :class="{'active': active}">
+            <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+            <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+        </button>
+
+        <img src="img/OFERTAS/Oferta3.jpg" alt="Camiseta geek Ofer3">
         <h3>ROBERT JOHNSON</h3>
         <p class="precio"> $270.00 </p>
-        <button class="agregar-carrito" data-nombre="ROBERT JOHNSON" data-precio="270.00">AGREGAR AL CARRITO</button>
+
+        <button class="agregar-carrito"
+
+                @click="carritoCount = addToCartAndGetNewCount('ROBERT JOHNSON', 270.00, 'img/OFERTAS/Oferta3.jpg')">
+
+            <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+        </button>
     </div>
 
     <div class="producto">
-        <img src="img/OFERTAS/Oferta4.jpg" alt="Camiseta geek 1">
+
+        <button class ="wishlist-button" data-id-producto="REBEL FORCES"
+                x-data="{ active: getWishlist().some(p => p.id === 'REBEL FORCES') }"
+                @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('REBEL FORCES', 'REBEL FORCES', 270.00, 'img/OFERTAS/Oferta4.jpg');"
+
+                :class="{'active': active}">
+            <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+            <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+        </button>
+
+        <img src="img/OFERTAS/Oferta4.jpg" alt="Camiseta geek Ofer4">
         <h3>REBEL FORCES</h3>
         <p class="precio"> $270.00 </p>
-        <button class="agregar-carrito" data-nombre="REBEL FORCES" data-precio="270.00">AGREGAR AL CARRITO</button>
+
+        <button class="agregar-carrito"
+
+                @click="carritoCount = addToCartAndGetNewCount('REBEL FORCES', 270.00, 'img/OFERTAS/Oferta4.jpg')">
+
+            <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+        </button>
     </div>
 
     <div class="producto">
-        <img src="img/OFERTAS/Oferta5.jpg" alt="Camiseta geek 1">
+
+        <button class ="wishlist-button" data-id-producto="GHOST 2025"
+                x-data="{ active: getWishlist().some(p => p.id === 'GHOST 2025') }"
+                @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('GHOST 2025', 'GHOST 2025', 270.00, 'img/OFERTAS/Oferta5.jpg');"
+
+                :class="{'active': active}">
+            <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+            <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+        </button>
+
+        <img src="img/OFERTAS/Oferta5.jpg" alt="Camiseta geek Ofer5">
         <h3>GHOST 2025</h3>
         <p class="precio"> $270.00 </p>
-        <button class="agregar-carrito" data-nombre="GHOST 2025" data-precio="270.00">AGREGAR AL CARRITO</button>
+
+        <button class="agregar-carrito"
+
+                @click="carritoCount = addToCartAndGetNewCount('GHOST 2025', 270.00, 'img/OFERTAS/Oferta5.jpg')">
+
+            <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+        </button>
     </div>
 
     <div class="producto">
-        <img src="img/OFERTAS/Oferta6.jpg" alt="Camiseta geek 1">
+
+        <button class ="wishlist-button" data-id-producto="KILLERS VIÑETAS"
+                x-data="{ active: getWishlist().some(p => p.id === 'KILLERS VIÑETAS') }"
+                @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('KILLERS VIÑETAS', 'KILLERS VIÑETAS', 270.00, 'img/OFERTAS/Oferta6.jpg');"
+
+                :class="{'active': active}">
+            <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+            <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+        </button>
+
+        <img src="img/OFERTAS/Oferta6.jpg" alt="Camiseta geek Ofer6">
         <h3>KILLERS VIÑETAS</h3>
         <p class="precio"> $270.00 </p>
-        <button class="agregar-carrito" data-nombre="KILLERS VIÑETAS" data-precio="270.00">AGREGAR AL CARRITO</button>
+
+        <button class="agregar-carrito"
+
+                @click="carritoCount = addToCartAndGetNewCount('KILLERS VIÑETAS', 270.00, 'img/OFERTAS/Oferta6.jpg')">
+
+            <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+        </button>
     </div>
 
     <div class="producto">
-        <img src="img/OFERTAS/Oferta7.jpg" alt="Camiseta geek 1">
+
+        <button class ="wishlist-button" data-id-producto="APROBADO POR CHAYANNE"
+                x-data="{ active: getWishlist().some(p => p.id === 'APROBADO POR CHAYANNE') }"
+                @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('APROBADO POR CHAYANNE', 'APROBADO POR CHAYANNE', 270.00, 'img/OFERTAS/Oferta7.jpg');"
+
+                :class="{'active': active}">
+            <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+            <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+        </button>
+
+        <img src="img/OFERTAS/Oferta7.jpg" alt="Camiseta geek Ofer7">
         <h3>APROBADO POR CHAYANNE</h3>
         <p class="precio"> $270.00 </p>
-        <button class="agregar-carrito" data-nombre="APROBADO POR CHAYANNE" data-precio="270.00">AGREGAR AL CARRITO</button>
+
+        <button class="agregar-carrito"
+
+                @click="carritoCount = addToCartAndGetNewCount('APROBADO POR CHAYANNE', 270.00, 'img/OFERTAS/Oferta7.jpg')">
+
+            <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+        </button>
     </div>
 
     <div class="producto">
-        <img src="img/OFERTAS/Oferta8.jpg" alt="Camiseta geek 1">
+
+        <button class ="wishlist-button" data-id-producto="LACAN"
+                x-data="{ active: getWishlist().some(p => p.id === 'LACAN') }"
+                @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('LACAN', 'LACAN', 270.00, 'img/OFERTAS/Oferta8.jpg');"
+
+                :class="{'active': active}">
+            <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+            <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+        </button>
+
+        <img src="img/OFERTAS/Oferta8.jpg" alt="Camiseta geek Ofer8">
         <h3>LACAN</h3>
         <p class="precio"> $270.00 </p>
-        <button class="agregar-carrito" data-nombre="LACAN" data-precio="270.00">AGREGAR AL CARRITO</button>
+
+        <button class="agregar-carrito"
+
+                @click="carritoCount = addToCartAndGetNewCount('LACAN', 270.00, 'img/OFERTAS/Oferta8.jpg')">
+
+            <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+        </button>
     </div>
     </div>
 </section>
