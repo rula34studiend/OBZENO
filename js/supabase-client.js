@@ -4,7 +4,6 @@ const supabaseUrl = 'https://fnmcmmzoecuikamktuys.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZubWNtbXpvZWN1aWthbWt0dXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ1MjczNTYsImV4cCI6MjA4MDEwMzM1Nn0.z4y41gZc6wKLqWrCHHfpGqYNPXISw2K26ngK147haAo';
 
 const _supabase = createClient(supabaseUrl, supabaseKey);
-
 async function getUsuarioActual() {
     const { data: { session } } = await _supabase.auth.getSession();
     if (!session) return null;
