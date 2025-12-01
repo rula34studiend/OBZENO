@@ -120,7 +120,9 @@
             <button class ="wishlist-button" data-id-producto="BEAST BREATHING"
                 x-data="{ active: getWishlist().some(p => p.id === 'BEAST BREATHING') }"
                 @click="active = !active;
+
                 wishlistCount = toggleWishlistAndGetNewCount('BEAST BREATHING', 'BEAST BREATHING', 270.00, 'img/DESTACADOS/Destacado1.jpg');"
+
                 :class="{'active': active}">
                 <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
                 <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
@@ -130,7 +132,9 @@
             <h3>BEAST BREATHING</h3>
             <p class="precio"> $270.00 </p>
             <button class="agregar-carrito"
+
                 @click="carritoCount = addToCartAndGetNewCount('BEAST BREATHING', 270.00, 'img/DESTACADOS/Destacado1.jpg')">
+
                 <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
             </button>
         </div>
@@ -139,17 +143,47 @@
         ////////////////////////////////////// */>
 
         <div class="producto">
-            <img src="img/DESTACADOS/Destacado2.jpg" alt="Camiseta geek 1">
+            <button class ="wishlist-button" data-id-producto="RETRO GAMES"
+                    x-data="{ active: getWishlist().some(p => p.id === 'RETRO GAMES') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('RETRO GAMES', 'RETRO GAMES', 270.00, 'img/DESTACADOS/Destacado2.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/DESTACADOS/Destacado2.jpg" alt="Camiseta geek 2">
             <h3>RETRO GAMES</h3>
             <p class="precio"> $270.00 </p>
-            <button class="agregar-carrito" data-nombre="RETRO GAMES" data-precio="270.00"data-img="img/DESTACADOS/Destacado2.jpg">AGREGAR AL CARRITO</button>
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('RETRO GAMES', 270.00, 'img/DESTACADOS/Destacado2.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
         </div>
 
         <div class="producto">
-            <img src="img/DESTACADOS/Destacado3.jpg" alt="Camiseta geek 1">
+            <button class ="wishlist-button" data-id-producto="VENDETTA"
+                    x-data="{ active: getWishlist().some(p => p.id === 'VENDETTA') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('VENDETTA', 'VENDETTA', 270.00, 'img/DESTACADOS/Destacado3.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/DESTACADOS/Destacado3.jpg" alt="Camiseta geek 3">
             <h3>VENDETTA</h3>
             <p class="precio"> $270.00 </p>
-            <button class="agregar-carrito" data-nombre="VENDETTA" data-precio="270.00" data-img="img/DESTACADOS/Destacado3">AGREGAR AL CARRITO</button>
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('VENDETTA', 270.00, 'img/DESTACADOS/Destacado3.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
         </div>
 
         <div id="carrito-contenedor"></div>
