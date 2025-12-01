@@ -103,6 +103,23 @@
             }">
             <h2>📝 CREAR CUENTA</h2>
 
+            <div class="social-login" style="margin-bottom: 20px;">
+                <button type="button" class="social-btn google" onclick="loginConRedSocial('google')">
+                    <i class="ri-google-fill"></i> Crear con Google
+                </button>
+                <button type="button" class="social-btn facebook" onclick="loginConRedSocial('facebook')">
+                    <i class="ri-facebook-fill"></i> Crear con Facebook
+                </button>
+                <button type="button" class="social-btn discord" onclick="loginConRedSocial('discord')">
+                    <i class="ri-discord-fill"></i> Crear con Discord
+                </button>
+            </div>
+
+            <div class="divider">
+                <span>O CREA CON TU CORREO</span>
+            </div>
+
+
             <form class="login-form" @submit.prevent="submitForm">
 
                 <div class="form-row">
