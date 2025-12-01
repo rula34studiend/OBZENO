@@ -1,34 +1,64 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto - OBZENO</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <title>OBZENO</title>
     <link rel="stylesheet" href="css/styles.css">
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <script>
         function getTotalCount() {
             try {
                 const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
                 return carrito.reduce((acc, item) => acc + item.cantidad, 0);
-            } catch (e) { return 0; }
+            } catch (e) {
+                console.error("Error al leer el carrito de localStorage:", e);
+                return 0;
+            }
         }
         function getWishlistCount() {
             try {
                 const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
                 return wishlist.length;
-            } catch (e) { return 0; }
+            } catch (e) {
+                return 0;
+            }
         }
     </script>
     <script src="js/carrito.js"></script>
     <script src="js/wishlist.js"></script>
 </head>
 
-<body x-data="{carritoCount: getTotalCount(), wishlistCount: getWishlistCount()}"
-      @cart-count-updated.window="carritoCount = $event.detail"
-      @wishlist-count-updated.window="wishlistCount = $event.detail">
+<body
+        x-data="{carritoCount: getTotalCount(), wishlistCount: getWishlistCount(),
+        isLoggedIn: false,
+        userName: 'Invitado',
 
+        async init() {
+            await new Promise(r => setTimeout(r, 50));
+            const user = await window.getUsuarioActual();
+            if (user) {
+                this.isLoggedIn = true;
+                this.userName = user.displayName;
+            }
+            this.carritoCount = getTotalCount();
+            this.wishlistCount = getWishlistCount();
+        },
+        logout() {
+            window.cerrarSesion();
+        }
+    }"
+        x-init="init()"
+        @cart-count-updated.window="carritoCount = $event.detail"
+        @wishlist-count-updated.window="wishlistCount = $event.detail">
+<!/* -----------------------------------------------------------
+BARRA DE NAVEGACION
+---------------------------------------------------------------*/>
 <header>
     <div class="logo">
         <h1>OBZENO</h1>
@@ -49,7 +79,27 @@
             <li><a href="#">ROPA DE PELICULAS</a></li>
             <li><a href="#">ROPA DE ANIME</a></li>
             <li><a href="#">FIGURAS</a></li>
-            <li><a href="login.html">INICIAR SESION</a></li>
+
+            <li x-show="isLoggedIn" class="user-menu-container">
+                <a href="#" class="amazon-style-user">
+                    <div class="user-icon">
+                        <i class="ri-user-3-line"></i>
+                    </div>
+                    <div class="user-text-stack">
+                        <span class="greeting-small">Hola,</span>
+                        <span class="username-bold" x-text="userName">Usuario</span>
+                    </div>
+                    <i class="ri-arrow-down-s-fill arrow-icon"></i>
+                </a>
+                <ul class="submenu">
+                    <li><a href="#" @click.prevent="logout()">Cerrar Sesión</a></li>
+                </ul>
+            </li>
+
+            <li x-show="!isLoggedIn" style="margin-left: 15px;">
+                <a href="login.html">INICIAR SESION</a>
+            </li>
+
             <a href="wishlist.html" class="wishlist-count-display">
                 <i class="ri-heart-line"></i>
                 <div class="wishlist-item-count" x-text="wishlistCount">0</div>

@@ -1282,6 +1282,12 @@ footer .btn-contacto:hover {
     margin-top: 25px;
 }
 
+.register-form-box h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #0c0c0c;
+}
+
 .register-prompt p {
     margin: 0;
     color: #777;
@@ -1301,7 +1307,7 @@ footer .btn-contacto:hover {
 }
 
 .btn-register-link:hover {
-    background-color: #e0e0e0;
+    background-color: #e44141;
 }
 .register-form-box {
     width: 100%;
