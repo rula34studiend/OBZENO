@@ -26,7 +26,7 @@ async function cerrarSesion() {
 async function loginConRedSocial(provider) {
     const { error } = await _supabase.auth.signInWithOAuth({
         provider: provider,
-        options: { redirectTo: 'https://51401dd6--obzenoproject.netlify.live/' }
+        options: { redirectTo: ' http://localhost:8888' }
     });
     if (error) console.error('Error social:', error);
 }
