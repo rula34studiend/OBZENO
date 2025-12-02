@@ -993,6 +993,46 @@ footer .btn-contacto:hover {
 .carrito-controles button:hover {
     background: #ccc;
 }
+
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast-notification.mostrar {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-notification i {
+    color: #28a745;
+    font-size: 1.2rem;
+}
+
+.carrito-info .precio-unitario {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 2px 0;
+}
+
+.carrito-info .precio-subtotal {
+    font-weight: bold;
+    color: #b60000;
+    margin: 5px 0;
+}
 /* ------------------------------
    BOTONES GENERALES
 ------------------------------- */

@@ -34,13 +34,16 @@ async function loginConRedSocial(provider) {
 async function obtenerCarritoNube() {
     const { data: { user } } = await _supabase.auth.getUser();
     if (!user) return [];
+    const { data, error } = await _supabase
+        .from('carrito')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('id', { ascending: true });
 
-    const { data, error } = await _supabase.from('carrito').select('*').eq('user_id', user.id);
     if (error) {
         console.error("Error obteniendo carrito:", error);
         return [];
     }
-    // Convertimos 'precio' a número para evitar errores de texto
     return data.map(item => ({...item, precio: parseFloat(item.precio)}));
 }
 

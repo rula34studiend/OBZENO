@@ -1,13 +1,12 @@
 let carritoGlobal = [];
 document.addEventListener("DOMContentLoaded", async function() {
+    crearContenedorToast();
     await new Promise(r => setTimeout(r, 200));
     const user = await window.getUsuarioActual();
 
     if (user) {
-        console.log("🟢 [Carrito] Usuario detectado:", user.email);
         const localCart = JSON.parse(localStorage.getItem("carrito")) || [];
         if (localCart.length > 0) {
-            console.log("⬆️ Subiendo carrito local a la nube...");
             for (const item of localCart) {
                 for(let i=0; i<item.cantidad; i++) {
                     await window.agregarItemNube(item);
@@ -17,7 +16,6 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
         carritoGlobal = await window.obtenerCarritoNube();
     } else {
-        console.log("🟠 [Carrito] Modo Invitado (LocalStorage).");
         carritoGlobal = JSON.parse(localStorage.getItem("carrito")) || [];
     }
 
@@ -42,7 +40,7 @@ window.addToCartAndGetNewCount = async function (nombre, precio, img) {
     }
 
     actualizarInterfaz();
-    alert(`¡${nombre} agregado al carrito!`); // Feedback inmediato
+    mostrarToast(`¡${nombre} agregado al carrito!`);
     return carritoGlobal.reduce((acc, item) => acc + item.cantidad, 0);
 };
 
@@ -82,7 +80,8 @@ function renderizarPaginaCarrito(contenedor, totalElem) {
             <img src="${item.img}" alt="${item.nombre}" class="carrito-img">
             <div class="carrito-info">
                 <h4>${item.nombre}</h4>
-                <p>Precio: $${precioNum.toFixed(2)}</p>
+                <p class="precio-unitario">Unitario: $${precioNum.toFixed(2)}</p>
+                <p class="precio-subtotal">Subtotal: $${subtotal.toFixed(2)}</p>
                 
                 <div class="carrito-controles">
                     <button onclick="modificarCantidad('${item.nombre}', -1)">-</button>
@@ -102,18 +101,17 @@ function renderizarPaginaCarrito(contenedor, totalElem) {
 
 window.modificarCantidad = async function(nombre, delta) {
     const user = await window.getUsuarioActual();
-
+    const itemTemp = carritoGlobal.find(i => i.nombre === nombre);
+    if(itemTemp) itemTemp.cantidad += delta;
+    actualizarInterfaz();
     if (user) {
         if (delta > 0) await window.agregarItemNube({ nombre });
         else await window.reducirItemNube(nombre);
         carritoGlobal = await window.obtenerCarritoNube();
     } else {
         const item = carritoGlobal.find(p => p.nombre === nombre);
-        if (item) {
-            item.cantidad += delta;
-            if (item.cantidad <= 0) {
-                carritoGlobal = carritoGlobal.filter(p => p.nombre !== nombre);
-            }
+        if (item && item.cantidad <= 0) {
+            carritoGlobal = carritoGlobal.filter(p => p.nombre !== nombre);
         }
         localStorage.setItem("carrito", JSON.stringify(carritoGlobal));
     }
@@ -131,3 +129,27 @@ window.eliminarDelTodo = async function(nombre) {
     }
     actualizarInterfaz();
 };
+
+function crearContenedorToast() {
+    if (!document.getElementById('toast-container')) {
+        const div = document.createElement('div');
+        div.id = 'toast-container';
+        document.body.appendChild(div);
+    }
+}
+
+function mostrarToast(mensaje) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `<i class="ri-checkbox-circle-fill"></i> <span>${mensaje}</span>`;
+
+    container.appendChild(toast);
+
+    setTimeout(() => toast.classList.add('mostrar'), 10);
+
+    setTimeout(() => {
+        toast.classList.remove('mostrar');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
