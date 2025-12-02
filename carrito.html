@@ -32,11 +32,14 @@
         if (user) {
             this.isLoggedIn = true;
             this.userName = user.displayName;
+            const carritoNube = await window.obtenerCarritoNube();
+            this.carritoCount = carritoNube.reduce((acc, item) => acc + item.cantidad, 0);
+            this.wishlistCount = getWishlistCount();
         } else {
             this.isLoggedIn = false;
             this.carritoCount = getTotalCount();
+            this.wishlistCount = getWishlistCount();
         }
-        this.wishlistCount = getWishlistCount();
     },
     logout() {
         window.cerrarSesion();
