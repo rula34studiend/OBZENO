@@ -45,3 +45,81 @@ window.getUsuarioActual = getUsuarioActual;
 window.cerrarSesion = cerrarSesion;
 window.loginConRedSocial = loginConRedSocial;
 window._supabase = _supabase;
+
+async function obtenerCarritoNube(){
+    const { data: { user } } = await _supabase.auth.getUser();
+    if (!user) return[];
+
+    const { data, error } = await  _supabase
+        .from('carrito')
+        .select('*')
+        .eq('user_id', user.id);
+
+    if (error){
+        console.error('Error obtenido carrito:', error);
+        return [];
+    }
+    return data;
+}
+
+async function  agregarItenNube(producto) {
+    const {data: { user } } = await  _supabase.auth.getUser();
+    if (!user) return;
+
+    const { data: existentes } = await _supabase
+        .from('carrito')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('nombre', producto.nombre)
+        .single();
+
+    if (existentes) {
+        const nuevaCantidad = existentes.cantidad + 1;
+        await _supabase
+            .from('carrito')
+            .update({ cantidad: nuevaCantidad })
+            .eq('id', existentes.id);
+    } else {
+        await _supabase
+            .from('carrito')
+            .insert([{
+                user_id: user.id,
+                nombre: producto.nombre,
+                precio: producto.precio,
+                img: producto.img,
+                cantidad: 1
+            }])
+    }
+}
+
+async function reducirItemNube(nombreProducto) {
+    const { data: { user } } = await _supabase.auth.getUser();
+    if (!user) return;
+
+    const { data: item } = await _supabase
+        .from('carrito')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('nombre', nombreProducto)
+        .single();
+
+    if (item) {
+        if (item.cantidad > 1) {
+            // Restar 1
+            await _supabase.from('carrito').update({ cantidad: item.cantidad - 1 }).eq('id', item.id);
+        } else {
+            // Eliminar fila
+            await _supabase.from('carrito').delete().eq('id', item.id);
+        }
+    }
+}
+
+async function eliminarItemNubeTotal(nombreProducto) {
+    const { data: { user } } = await _supabase.auth.getUser();
+    if (!user) await _supabase.from('carrito').delete().eq('user_id', user.id).eq('nombre', nombreProducto);
+}
+
+window.obtenerCarritoNube = obtenerCarritoNube;
+window.agregarItemNube = agregarItemNube;
+window.reducirItemNube = reducirItemNube;
+window.eliminarItemNubeTotal = eliminarItemNubeTotal;

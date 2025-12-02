@@ -969,7 +969,30 @@ footer .btn-contacto:hover {
         margin-left: auto;
     }
 }
+.carrito-controles {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
 
+.carrito-controles button {
+    background: #eee;
+    color: #333;
+    border: 1px solid #ddd;
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    font-weight: bold;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carrito-controles button:hover {
+    background: #ccc;
+}
 /* ------------------------------
    BOTONES GENERALES
 ------------------------------- */
