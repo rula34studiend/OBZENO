@@ -11,51 +11,34 @@
 
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
     <script>
-        function getTotalCount() {
-            try {
-                const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-                return carrito.reduce((acc, item) => acc + item.cantidad, 0);
-            } catch (e) {
-                console.error("Error al leer el carrito de localStorage:", e);
-                return 0;
-            }
-        }
-        function getWishlistCount() {
-            try {
-                const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-                return wishlist.length;
-            } catch (e) {
-                return 0;
-            }
-        }
+        function getTotalCount() { try { return JSON.parse(localStorage.getItem("carrito")||"[]").reduce((a,b)=>a+b.cantidad,0); } catch(e){return 0;} }
+        function getWishlistCount() { try { return JSON.parse(localStorage.getItem("wishlist")||"[]").length; } catch(e){return 0;} }
     </script>
+
     <script src="js/carrito.js"></script>
     <script src="js/wishlist.js"></script>
 </head>
 
-<body
-        x-data="{carritoCount: getTotalCount(), wishlistCount: getWishlistCount(),
-        isLoggedIn: false,
-        userName: 'Invitado',
-
-        async init() {
-            await new Promise(r => setTimeout(r, 50));
-            const user = await window.getUsuarioActual();
-            if (user) {
-                this.isLoggedIn = true;
-                this.userName = user.displayName;
-            }
-            this.carritoCount = getTotalCount();
-            this.wishlistCount = getWishlistCount();
-        },
-        logout() {
-            window.cerrarSesion();
+<body x-data="{
+    carritoCount: 0,
+    wishlistCount: 0,
+    isLoggedIn: false,
+    userName: 'Invitado',
+    async initSession() {
+        await new Promise(r => setTimeout(r, 50));
+        const user = await window.getUsuarioActual();
+        if (user) {
+            this.isLoggedIn = true;
+            this.userName = user.displayName;
         }
-    }"
-        x-init="init()"
-        @cart-count-updated.window="carritoCount = $event.detail"
-        @wishlist-count-updated.window="wishlistCount = $event.detail">
+        this.carritoCount = getTotalCount();
+        this.wishlistCount = getWishlistCount();
+    },
+    logout() { window.cerrarSesion(); }
+}" x-init="initSession()">
+
 <!/* -----------------------------------------------------------
 BARRA DE NAVEGACION
 ---------------------------------------------------------------*/>
@@ -114,52 +97,28 @@ BARRA DE NAVEGACION
 
 <!---------------------------------------- CARRITO -------------------------------------->
 <div class="main-content-wrapper">
-    <section class="carrito" x-data="getCarritoItems()">
+    <section class="carrito">
         <h2>🛍️ Carrito de Compras</h2>
 
         <div id="carrito-items-contenedor" class="carrito-items">
-
-            <template x-if="carritoItems.length === 0">
-                <p class="carrito-vacio">Tu carrito está vacío 😢</p>
-            </template>
-
-            <template x-for="(producto, index) in carritoItems" :key="index">
-                <div class="carrito-item">
-                    <img :src="producto.img" :alt="producto.nombre" class="carrito-img">
-
-                    <div class="carrito-info">
-                        <h4 x-text="producto.nombre"></h4>
-                        <p>Precio Unitario: $<span x-text="producto.precio.toFixed(2)"></span></p>
-                        <p>Subtotal: $<span x-text="(producto.precio * producto.cantidad).toFixed(2)"></span></p>
-                    </div>
-
-                    <div class="carrito-cantidad-control">
-                        <button class="btn-cantidad-restar" @click="updateItemQuantity(index, -1)">
-                            <i class="ri-subtract-line"></i>
-                        </button>
-                        <span class="cantidad-display" x-text="producto.cantidad"></span>
-                        <button class="btn-cantidad-sumar" @click="updateItemQuantity(index, 1)">
-                            <i class="ri-add-line"></i>
-                        </button>
-                    </div>
-
-                    <button class="eliminar-item" @click="updateItemQuantity(index, 0)">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                </div>
-            </template>
-
+            <p class="cargando">Cargando carrito...</p>
         </div>
 
-        <h3 id="carrito-total">Total: $<span x-text="getTotal()"></span></h3>
+        <h3 id="carrito-total">Total: $0.00</h3>
 
         <div class="botones-carrito">
-            <button @click="window.location.href='index.html'">CONTINUAR COMPRANDO</button>
+            <button onclick="window.location.href='index.html'">CONTINUAR COMPRANDO</button>
             <button class="pagar-btn">PAGAR AHORA</button>
         </div>
     </section>
 </div>
 
+<footer>
+    <p>&copy; 2025 OBZENO. Todos los derechos reservedos por R34.</p>
+    <a href="contacto.html" class="btn-contacto">CONTACTAR</a>
+</footer>
+
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 </body>
 </html>

@@ -1,15 +1,13 @@
 let carritoGlobal = [];
 document.addEventListener("DOMContentLoaded", async function() {
-    await new Promise(r => setTimeout(r, 100));
-
+    await new Promise(r => setTimeout(r, 200));
     const user = await window.getUsuarioActual();
 
     if (user) {
-        console.log("🟢 Usuario detectado. Usando NUBE.");
-
+        console.log("🟢 [Carrito] Usuario detectado:", user.email);
         const localCart = JSON.parse(localStorage.getItem("carrito")) || [];
         if (localCart.length > 0) {
-            console.log("Subiendo carrito local a la nube...");
+            console.log("⬆️ Subiendo carrito local a la nube...");
             for (const item of localCart) {
                 for(let i=0; i<item.cantidad; i++) {
                     await window.agregarItemNube(item);
@@ -17,10 +15,9 @@ document.addEventListener("DOMContentLoaded", async function() {
             }
             localStorage.removeItem("carrito");
         }
-
         carritoGlobal = await window.obtenerCarritoNube();
     } else {
-        console.log("🟠 Invitado. Usando LOCALSTORAGE.");
+        console.log("🟠 [Carrito] Modo Invitado (LocalStorage).");
         carritoGlobal = JSON.parse(localStorage.getItem("carrito")) || [];
     }
 
@@ -34,7 +31,6 @@ window.addToCartAndGetNewCount = async function (nombre, precio, img) {
     if (user) {
         await window.agregarItemNube({ nombre, precio: precioNum, img });
         carritoGlobal = await window.obtenerCarritoNube();
-
     } else {
         const item = carritoGlobal.find(p => p.nombre === nombre);
         if (item) {
@@ -46,17 +42,16 @@ window.addToCartAndGetNewCount = async function (nombre, precio, img) {
     }
 
     actualizarInterfaz();
-
+    alert(`¡${nombre} agregado al carrito!`); // Feedback inmediato
     return carritoGlobal.reduce((acc, item) => acc + item.cantidad, 0);
 };
 
 function actualizarInterfaz() {
     const totalItems = carritoGlobal.reduce((acc, item) => acc + item.cantidad, 0);
-    if (window.Alpine) {
-        const root = document.querySelector('[x-data]');
-        if (root && root.__x) root.__x.$data.carritoCount = totalItems;
+    const root = document.querySelector('[x-data]');
+    if (root && root.__x) {
+        root.__x.$data.carritoCount = totalItems;
     }
-
     const contenedor = document.getElementById("carrito-items-contenedor");
     const totalElem = document.getElementById("carrito-total");
 
@@ -76,8 +71,9 @@ function renderizarPaginaCarrito(contenedor, totalElem) {
 
     let totalDinero = 0;
 
-    carritoGlobal.forEach((item, index) => {
-        const subtotal = item.precio * item.cantidad;
+    carritoGlobal.forEach((item) => {
+        const precioNum = parseFloat(item.precio);
+        const subtotal = precioNum * item.cantidad;
         totalDinero += subtotal;
 
         const itemHTML = document.createElement("div");
@@ -86,10 +82,11 @@ function renderizarPaginaCarrito(contenedor, totalElem) {
             <img src="${item.img}" alt="${item.nombre}" class="carrito-img">
             <div class="carrito-info">
                 <h4>${item.nombre}</h4>
-                <p>Precio: $${item.precio.toFixed(2)}</p>
+                <p>Precio: $${precioNum.toFixed(2)}</p>
+                
                 <div class="carrito-controles">
                     <button onclick="modificarCantidad('${item.nombre}', -1)">-</button>
-                    <span>${item.cantidad}</span>
+                    <span style="font-weight:bold; margin:0 10px;">${item.cantidad}</span>
                     <button onclick="modificarCantidad('${item.nombre}', 1)">+</button>
                 </div>
             </div>
@@ -103,17 +100,14 @@ function renderizarPaginaCarrito(contenedor, totalElem) {
     totalElem.innerHTML = `Total: $${totalDinero.toFixed(2)}`;
 }
 
-
 window.modificarCantidad = async function(nombre, delta) {
     const user = await window.getUsuarioActual();
 
     if (user) {
-        // NUBE
         if (delta > 0) await window.agregarItemNube({ nombre });
         else await window.reducirItemNube(nombre);
         carritoGlobal = await window.obtenerCarritoNube();
     } else {
-        // LOCAL
         const item = carritoGlobal.find(p => p.nombre === nombre);
         if (item) {
             item.cantidad += delta;

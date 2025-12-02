@@ -8,87 +8,63 @@ async function getUsuarioActual() {
     const { data: { session } } = await _supabase.auth.getSession();
     if (!session) return null;
 
-    const { data: profile, error } = await _supabase
+    const { data: profile } = await _supabase
         .from('profiles')
         .select('username, full_name')
         .eq('id', session.user.id)
-        .single();
+        .maybeSingle();
 
-    if (error) {
-        console.error("Error al cargar perfil:", error);
-        return session.user;
-    }
+    const rawName = profile?.full_name || profile?.username || session.user.email.split('@')[0];
 
-    return {
-        ...session.user,
-        displayName: profile.full_name || profile.username || 'Usuario'
-    };
+    return { ...session.user, displayName: rawName };
 }
 
 async function cerrarSesion() {
-    const { error } = await _supabase.auth.signOut();
-    if (!error) window.location.href = 'index.html';
+    await _supabase.auth.signOut();
+    window.location.href = 'index.html';
 }
-
-
 async function loginConRedSocial(provider) {
-    const { data, error } = await _supabase.auth.signInWithOAuth({
+    const { error } = await _supabase.auth.signInWithOAuth({
         provider: provider,
-        options: {
-            redirectTo: 'https://obzenoproject.netlify.app'
-        }
+        options: { redirectTo: 'https://obzenoproject.netlify.app/index.html' }
     });
     if (error) console.error('Error social:', error);
 }
 
-window.getUsuarioActual = getUsuarioActual;
-window.cerrarSesion = cerrarSesion;
-window.loginConRedSocial = loginConRedSocial;
-window._supabase = _supabase;
-
-async function obtenerCarritoNube(){
+async function obtenerCarritoNube() {
     const { data: { user } } = await _supabase.auth.getUser();
-    if (!user) return[];
+    if (!user) return [];
 
-    const { data, error } = await  _supabase
-        .from('carrito')
-        .select('*')
-        .eq('user_id', user.id);
-
-    if (error){
-        console.error('Error obtenido carrito:', error);
+    const { data, error } = await _supabase.from('carrito').select('*').eq('user_id', user.id);
+    if (error) {
+        console.error("Error obteniendo carrito:", error);
         return [];
     }
-    return data;
+    // Convertimos 'precio' a número para evitar errores de texto
+    return data.map(item => ({...item, precio: parseFloat(item.precio)}));
 }
 
-async function  agregarItenNube(producto) {
-    const {data: { user } } = await  _supabase.auth.getUser();
+async function agregarItemNube(producto) {
+    const { data: { user } } = await _supabase.auth.getUser();
     if (!user) return;
-
-    const { data: existentes } = await _supabase
+    const { data: existente, error } = await _supabase
         .from('carrito')
         .select('*')
         .eq('user_id', user.id)
         .eq('nombre', producto.nombre)
-        .single();
+        .maybeSingle();
 
-    if (existentes) {
-        const nuevaCantidad = existentes.cantidad + 1;
-        await _supabase
-            .from('carrito')
-            .update({ cantidad: nuevaCantidad })
-            .eq('id', existentes.id);
+    if (error) console.error("Error buscando producto:", error);
+    if (existente) {
+        await _supabase.from('carrito').update({ cantidad: existente.cantidad + 1 }).eq('id', existente.id);
     } else {
-        await _supabase
-            .from('carrito')
-            .insert([{
-                user_id: user.id,
-                nombre: producto.nombre,
-                precio: producto.precio,
-                img: producto.img,
-                cantidad: 1
-            }])
+        await _supabase.from('carrito').insert([{
+            user_id: user.id,
+            nombre: producto.nombre,
+            precio: parseFloat(producto.precio),
+            img: producto.img,
+            cantidad: 1
+        }]);
     }
 }
 
@@ -101,14 +77,12 @@ async function reducirItemNube(nombreProducto) {
         .select('*')
         .eq('user_id', user.id)
         .eq('nombre', nombreProducto)
-        .single();
+        .maybeSingle();
 
     if (item) {
         if (item.cantidad > 1) {
-            // Restar 1
             await _supabase.from('carrito').update({ cantidad: item.cantidad - 1 }).eq('id', item.id);
         } else {
-            // Eliminar fila
             await _supabase.from('carrito').delete().eq('id', item.id);
         }
     }
@@ -116,10 +90,17 @@ async function reducirItemNube(nombreProducto) {
 
 async function eliminarItemNubeTotal(nombreProducto) {
     const { data: { user } } = await _supabase.auth.getUser();
-    if (!user) await _supabase.from('carrito').delete().eq('user_id', user.id).eq('nombre', nombreProducto);
+    if (user) await _supabase.from('carrito').delete().eq('user_id', user.id).eq('nombre', nombreProducto);
 }
 
+async function registrarUsuario(email, password, metadata) {}
+async function iniciarSesion(email, password) {}
+
+window.getUsuarioActual = getUsuarioActual;
+window.cerrarSesion = cerrarSesion;
+window.loginConRedSocial = loginConRedSocial;
 window.obtenerCarritoNube = obtenerCarritoNube;
 window.agregarItemNube = agregarItemNube;
 window.reducirItemNube = reducirItemNube;
 window.eliminarItemNubeTotal = eliminarItemNubeTotal;
+window._supabase = _supabase;
