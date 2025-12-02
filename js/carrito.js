@@ -46,10 +46,10 @@ window.addToCartAndGetNewCount = async function (nombre, precio, img) {
 
 function actualizarInterfaz() {
     const totalItems = carritoGlobal.reduce((acc, item) => acc + item.cantidad, 0);
-    const root = document.querySelector('[x-data]');
-    if (root && root.__x) {
-        root.__x.$data.carritoCount = totalItems;
-    }
+    window.dispatchEvent(new CustomEvent('carrito-actualizado', {
+        detail: totalItems
+    }));
+
     const contenedor = document.getElementById("carrito-items-contenedor");
     const totalElem = document.getElementById("carrito-total");
 

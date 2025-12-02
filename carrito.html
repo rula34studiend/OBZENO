@@ -44,7 +44,9 @@
     logout() {
         window.cerrarSesion();
     }
-}" x-init="initSession()">
+}"
+      x-init="initSession()"
+      @carrito-actualizado.window="carritoCount = $event.detail">
 
 <!/* -----------------------------------------------------------
 BARRA DE NAVEGACION
