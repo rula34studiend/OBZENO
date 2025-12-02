@@ -32,11 +32,15 @@
         if (user) {
             this.isLoggedIn = true;
             this.userName = user.displayName;
+        } else {
+            this.isLoggedIn = false;
+            this.carritoCount = getTotalCount();
         }
-        this.carritoCount = getTotalCount();
         this.wishlistCount = getWishlistCount();
     },
-    logout() { window.cerrarSesion(); }
+    logout() {
+        window.cerrarSesion();
+    }
 }" x-init="initSession()">
 
 <!/* -----------------------------------------------------------

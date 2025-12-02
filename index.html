@@ -34,28 +34,27 @@
     <script src="js/wishlist.js"></script>
 </head>
 
-<body
-        x-data="{carritoCount: getTotalCount(), wishlistCount: getWishlistCount(),
-        isLoggedIn: false,
-        userName: 'Invitado',
-
-        async init() {
-            await new Promise(r => setTimeout(r, 50));
-            const user = await window.getUsuarioActual();
-            if (user) {
-                this.isLoggedIn = true;
-                this.userName = user.displayName;
-            }
+<body x-data="{
+    carritoCount: 0,
+    wishlistCount: 0,
+    isLoggedIn: false,
+    userName: 'Invitado',
+    async initSession() {
+        await new Promise(r => setTimeout(r, 50));
+        const user = await window.getUsuarioActual();
+        if (user) {
+            this.isLoggedIn = true;
+            this.userName = user.displayName;
+        } else {
+            this.isLoggedIn = false;
             this.carritoCount = getTotalCount();
-            this.wishlistCount = getWishlistCount();
-        },
-        logout() {
-            window.cerrarSesion();
         }
-    }"
-        x-init="init()"
-        @cart-count-updated.window="carritoCount = $event.detail"
-        @wishlist-count-updated.window="wishlistCount = $event.detail">
+        this.wishlistCount = getWishlistCount();
+    },
+    logout() {
+        window.cerrarSesion();
+    }
+}" x-init="initSession()">
 <!/* -----------------------------------------------------------
     BARRA DE NAVEGACION
 ---------------------------------------------------------------*/>
