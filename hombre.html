@@ -3,23 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OBZENO MEN</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <title>hombre</title>
     <link rel="stylesheet" href="css/styles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script>
+        function getTotalCount() {
+            try {
+                const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+                return carrito.reduce((acc, item) => acc + item.cantidad, 0);
+            } catch (e) {
+                console.error("Error al leer el carrito de localStorage:", e);
+                return 0;
+            }
+        }
+        function getWishlistCount() {
+            try {
+                const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+                return wishlist.length;
+            } catch (e) {
+                return 0;
+            }
+        }
+    </script>
+    <script src="js/carrito.js"></script>
+    <script src="js/wishlist.js"></script>
 </head>
-<body>
 
+<body x-data="{
+    carritoCount: 0,
+    wishlistCount: 0,
+    isLoggedIn: false,
+    userName: 'Invitado',
+    async initSession() {
+        await new Promise(r => setTimeout(r, 50));
+        const user = await window.getUsuarioActual();
+        if (user) {
+            this.isLoggedIn = true;
+            this.userName = user.displayName;
+            const carritoNube = await window.obtenerCarritoNube();
+            this.carritoCount = carritoNube.reduce((acc, item) => acc + item.cantidad, 0);
+            this.wishlistCount = getWishlistCount();
+        } else {
+            this.isLoggedIn = false;
+            this.carritoCount = getTotalCount();
+            this.wishlistCount = getWishlistCount();
+        }
+    },
+    logout() {
+        window.cerrarSesion();
+    }
+}"
+      x-init="initSession()"
+      @carrito-actualizado.window="carritoCount = $event.detail">
 <!/* -----------------------------------------------------------
-Barra de Navegacion
+BARRA DE NAVEGACION
 ---------------------------------------------------------------*/>
-
 <header>
     <div class="logo">
         <h1>OBZENO</h1>
     </div>
     <nav>
         <ul>
-            <li><a href="index.html">Inicio</a></li>
+            <li><a href="index.html">INICIO</a></li>
             <li>
                 <a href="#">TIENDA DE ROPA</a>
                 <ul class="submenu">
@@ -33,8 +83,35 @@ Barra de Navegacion
             <li><a href="#">ROPA DE PELICULAS</a></li>
             <li><a href="#">ROPA DE ANIME</a></li>
             <li><a href="#">FIGURAS</a></li>
-            <li><a href="#">INICIAR SESION</a></li>
-            <li><button id="ABRIR-CARRITO" class="btn-carrito">CARRITO (0)</button><li> <!-- Boton de carrito -->
+
+            <li x-show="isLoggedIn" class="user-menu-container">
+                <a href="#" class="amazon-style-user">
+                    <div class="user-icon">
+                        <i class="ri-user-3-line"></i>
+                    </div>
+                    <div class="user-text-stack">
+                        <span class="greeting-small">Hola,</span>
+                        <span class="username-bold" x-text="userName">Usuario</span>
+                    </div>
+                    <i class="ri-arrow-down-s-fill arrow-icon"></i>
+                </a>
+                <ul class="submenu">
+                    <li><a href="#" @click.prevent="logout()">Cerrar Sesión</a></li>
+                </ul>
+            </li>
+
+            <li x-show="!isLoggedIn" style="margin-left: 15px;">
+                <a href="login.html">INICIAR SESION</a>
+            </li>
+
+            <a href="wishlist.html" class="wishlist-count-display">
+                <i class="ri-heart-line"></i>
+                <div class="wishlist-item-count" x-text="wishlistCount">0</div>
+            </a>
+            <a href="carrito.html" class="cartTab" id="cartLink">
+                <i class="ri-shopping-cart-line"></i>
+                <div class="cart-item-count" x-text="carritoCount">0</div>
+            </a>
         </ul>
     </nav>
 </header>
@@ -43,58 +120,418 @@ Barra de Navegacion
     PRODUCTOS DE HOMBRE
 ---------------------------------------------------------------*/>
 
-<section class="procutos-categoria">
-    <h2>OBZENO</h2>
-    <h4>PLAYERAS</h4>
+<section class="ofertas-especiales" id="ofertas-especiales">
+    <h2> HOMBRES </h2>
     <div class="productos">
 
-        <!/ /////////////////////////////////////////////////
-        REPETIR ESTE BLOQUE DE CODIGO POR PRODUCTOS
-        ////////////////////////////////////////////////// */>
+    <div class="producto">
 
-        <div class="producto">
-            <img src="img/1.jpg" alt="Camiseta geek 1">
-            <h3>Stich Experiment 626</h3>
-            <p class="precio">$269.40</p>
-            <button class="agregar-carrito" data-nombre="Stich Experiment 626" data-precio="269.40">Agregar al Carrito</button>
-        </div>
+        <button class ="wishlist-button" data-id-producto="SAITAMA Y GENOS"
+                x-data="{ active: getWishlist().some(p => p.id === 'SAITAMA Y GENOS') }"
+                @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('SAITAMA Y GENOS', 'SAITAMA Y GENOS', 270.00, 'img/HOMBRE/Hombre1.jpg');"
+
+                :class="{'active': active}">
+            <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+            <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+        </button>
+
+        <img src="img/HOMBRE/Hombre1.jpg" alt="Camiseta geek Hombre1">
+        <h3>SAITAMA Y GENOS</h3>
+        <p class="precio"> $270.00 </p>
+
+        <button class="agregar-carrito"
+
+                @click="carritoCount = addToCartAndGetNewCount('SAITAMA Y GENOS', 270.00, 'img/HOMBRE/Hombre1.jpg')">
+
+            <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+        </button>
+    </div>
         <!/ /////////////////////////////////////
         ////////////////////////////////////// */>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="SAKAMOTOS DAYS"
+                    x-data="{ active: getWishlist().some(p => p.id === 'SAKAMOTOS DAYS') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('SAKAMOTOS DAYS', 'SAKAMOTOS DAYS', 270.00, 'img/HOMBRE/Hombre2.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre2.jpg" alt="Camiseta geek Hombre2">
+            <h3>SAKAMOTOS DAYS</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('SAKAMOTOS DAYS', 270.00, 'img/HOMBRE/Hombre2.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="DOUMA"
+                    x-data="{ active: getWishlist().some(p => p.id === 'DOUMA') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('DOUMA', 'DOUMA', 270.00, 'img/HOMBRE/Hombre3.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre3.jpg" alt="Camiseta geek Hombre3">
+            <h3>DOUMA</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('DOUMA', 270.00, 'img/HOMBRE/Hombre3.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="COURAGE JASPE"
+                    x-data="{ active: getWishlist().some(p => p.id === 'COURAGE JASPE') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('COURAGE JASPE', 'COURAGE JASPE', 270.00, 'img/HOMBRE/Hombre4.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre4.jpg" alt="Camiseta geek Hombre4">
+            <h3>COURAGE JASPE</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('COURAGE JASPE', 270.00, 'img/HOMBRE/Hombre4.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="MOTORBREATH"
+                    x-data="{ active: getWishlist().some(p => p.id === 'MOTORBREATH') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('MOTORBREATH', 'MOTORBREATH', 270.00, 'img/HOMBRE/Hombre5.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre5.jpg" alt="Camiseta geek Hombre5">
+            <h3>MOTORBREATH</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('MOTORBREATH', 270.00, 'img/HOMBRE/Hombre5.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="DON RAMON BOX"
+                    x-data="{ active: getWishlist().some(p => p.id === 'DON RAMON BOX') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('DON RAMON BOX', 'DON RAMON BOX', 270.00, 'img/HOMBRE/Hombre6.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre6.jpg" alt="Camiseta geek Hombre6">
+            <h3>DON RAMON BOX</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('DON RAMON BOX', 270.00, 'img/HOMBRE/Hombre6.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="TURBO ABUELA DAN DA DAN"
+                    x-data="{ active: getWishlist().some(p => p.id === 'TURBO ABUELA DAN DA DAN') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('TURBO ABUELA DAN DA DAN', 'TURBO ABUELA DAN DA DAN', 270.00, 'img/HOMBRE/Hombre7.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre7.jpg" alt="Camiseta geek Hombre7">
+            <h3>TURBO ABUELA DAN DA DAN</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('TURBO ABUELA DAN DA DAN', 270.00, 'img/HOMBRE/Hombre7.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="DESTELLO RELAMPAGO"
+                    x-data="{ active: getWishlist().some(p => p.id === 'DESTELLO RELAMPAGO') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('DESTELLO RELAMPAGO', 'DESTELLO RELAMPAGO', 270.00, 'img/HOMBRE/Hombre8.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre8.jpg" alt="Camiseta geek Hombre8">
+            <h3>DESTELLO RELAMPAGO</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('DESTELLO RELAMPAGO', 270.00, 'img/HOMBRE/Hombre8.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="SUDADERA REN Y STIMPY"
+                    x-data="{ active: getWishlist().some(p => p.id === 'SUDADERA REN Y STIMPY') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('SUDADERA REN Y STIMPY', 'SUDADERA REN Y STIMPY', 270.00, 'img/HOMBRE/Hombre9.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre9.jpg" alt="Camiseta geek Hombre9">
+            <h3>SUDADERA REN Y STIMPY</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('SUDADERA REN Y STIMPY', 270.00, 'img/HOMBRE/Hombre9.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="MAL DE OJO"
+                    x-data="{ active: getWishlist().some(p => p.id === 'MAL DE OJO') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('MAL DE OJO', 'MAL DE OJO', 270.00, 'img/HOMBRE/Hombre10.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre10.jpg" alt="Camiseta geek Hombre10">
+            <h3>MAL DE OJO</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('MAL DE OJO', 270.00, 'img/HOMBRE/Hombre10.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="SCORPION"
+                    x-data="{ active: getWishlist().some(p => p.id === 'SCORPION') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('SCORPION', 'SCORPION', 270.00, 'img/HOMBRE/Hombre11.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre11.jpg" alt="Camiseta geek Hombre11">
+            <h3>SCORPION</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('SCORPION', 270.00, 'img/HOMBRE/Hombre11.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="PREDATOR"
+                    x-data="{ active: getWishlist().some(p => p.id === 'PREDATOR') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('PREDATOR', 'PREDATOR', 270.00, 'img/HOMBRE/Hombre12.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre12.jpg" alt="Camiseta geek Hombre12">
+            <h3>PREDATOR</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('PREDATOR', 270.00, 'img/HOMBRE/Hombre12.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="SLASHERS RUSHMORE"
+                    x-data="{ active: getWishlist().some(p => p.id === 'SLASHERS RUSHMORE') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('SLASHERS RUSHMORE', 'SLASHERS RUSHMORE', 270.00, 'img/HOMBRE/Hombre13.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre13.jpg" alt="Camiseta geek Hombre13">
+            <h3>SLASHERS RUSHMORE</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('SLASHERS RUSHMORE', 270.00, 'img/HOMBRE/Hombre13.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="THRILLER"
+                    x-data="{ active: getWishlist().some(p => p.id === 'THRILLER') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('THRILLER', 'THRILLER', 270.00, 'img/HOMBRE/Hombre14.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre14.jpg" alt="Camiseta geek Hombre14">
+            <h3>THRILLER</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('THRILLER', 270.00, 'img/HOMBRE/Hombre14.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="TEXAS CHAIN SAW"
+                    x-data="{ active: getWishlist().some(p => p.id === 'TEXAS CHAIN SAW') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('TEXAS CHAIN SAW', 'TEXAS CHAIN SAW', 270.00, 'img/HOMBRE/Hombre15.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre15.jpg" alt="Camiseta geek Hombre15">
+            <h3>TEXAS CHAIN SAW</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('TEXAS CHAIN SAW', 270.00, 'img/HOMBRE/Hombre15.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
+        <div class="producto">
+
+            <button class ="wishlist-button" data-id-producto="VACACIONES DE BATMAN"
+                    x-data="{ active: getWishlist().some(p => p.id === 'VACACIONES DE BATMAN') }"
+                    @click="active = !active;
+                wishlistCount = toggleWishlistAndGetNewCount('VACACIONES DE BATMAN', 'VACACIONES DE BATMAN', 270.00, 'img/HOMBRE/Hombre16.jpg');"
+
+                    :class="{'active': active}">
+                <i class="ri-heart-line" :class="{ 'ri-heart-fill': active, 'ri-heart-line': !active }"></i>
+                <span x-text="active ? 'EN WISHLIST' : 'AÑADIR A WISHLIST'"></span>
+            </button>
+
+            <img src="img/HOMBRE/Hombre16.jpg" alt="Camiseta geek Hombre16">
+            <h3>VACACIONES DE BATMAN</h3>
+            <p class="precio"> $270.00 </p>
+
+            <button class="agregar-carrito"
+
+                    @click="carritoCount = addToCartAndGetNewCount('VACACIONES DE BATMAN', 270.00, 'img/HOMBRE/Hombre16.jpg')">
+
+                <i class="ri-shopping-cart-line"></i> AGREGAR AL CARRITO
+            </button>
+        </div>
+
 
     </div>
 </section>
 
-<!/* -------------------------------------------------------------
-PIE DE PAGINA
---------------------------------------------------------------- */>
-
 <footer>
     <p>&copy; 2025 OBZENO. Todos los derechos reservedos por R34.</p>
+
+    <!/* -------------------------------------------------------------
+    CONTACTO
+    ---------------------------------------------------------------- */>
+    <a href="contacto.html" class="btn-contacto">CONTACTAR</a>
+
 </footer>
-
-<!/* -------------------------------------------------------------
-Carrito de Compra
-------------------------------------------------------------- */>
-
-<!/* -------------------------------------------------------------
-CARRITO DE COMPRAS
----------------------------------------------------------------- */>
-
-<div class="carrito-contenido" id="carrito-contenido">
-    <button id="cerrar-carrito">X</button>
-    <h3>CARRITO</h3>
-    <ul id="lista-carrito"></ul>
-    <div id="carrito-productos"></div>
-    <p id="subtotal">SUBTOTAL: $0.00</p>
-    <button id="ver-carrito" class="btn-ver-carrito"> VER EL CARRITO </button>
-</div>
 
 <!/* -------------------------------------------------------------
 SWIPER JS
 --------------------------------------------------------------- */>
 
 
-<script src="js/contador-carrito.js"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="js/CARRUSEL.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 
 
